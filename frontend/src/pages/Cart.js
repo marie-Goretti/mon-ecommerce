@@ -1,8 +1,10 @@
 import { useApp } from '../context/AppContext';
-import { removeFromCart } from '../api';
+import { removeFromCart, createOrder } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 function Cart() {
   const { cart, fetchCart, user } = useApp();
+  const navigate = useNavigate();
 
   const handleRemove = async (id) => {
     try {
@@ -10,6 +12,16 @@ function Cart() {
       await fetchCart();
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      await createOrder();
+      await fetchCart();
+      navigate('/orders');
+    } catch (err) {
+      alert("Erreur lors de la commande");
     }
   };
 
@@ -42,7 +54,7 @@ function Cart() {
             <span style={styles.totalLabel}>Total</span>
             <span style={styles.totalAmount}>{total.toFixed(2)} €</span>
           </div>
-          <button style={styles.checkoutBtn}>✅ Commander</button>
+          <button onClick={handleCheckout} style={styles.checkoutBtn}>✅ Commander</button>
         </>
       )}
     </div>
@@ -65,7 +77,7 @@ const styles = {
   totalBox: { display: 'flex', justifyContent: 'space-between', background: 'white', padding: '20px', borderRadius: '12px', marginTop: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.07)' },
   totalLabel: { fontSize: '18px', fontWeight: 'bold' },
   totalAmount: { fontSize: '22px', fontWeight: 'bold', color: '#e94560' },
-  checkoutBtn: { width: '100%', padding: '15px', background: '#1a1a2e', color: 'white', border: 'none', borderRadius: '10px', fontSize: '16px', fontWeight: 'bold', marginTop: '16px' }
+  checkoutBtn: { width: '100%', padding: '15px', background: '#1a1a2e', color: 'white', border: 'none', borderRadius: '10px', fontSize: '16px', fontWeight: 'bold', marginTop: '16px', cursor: 'pointer' }
 };
 
 export default Cart;

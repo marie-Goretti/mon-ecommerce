@@ -40,3 +40,10 @@ export const uploadImage = (formData) => API.post('/upload', formData, {
     'Content-Type': 'multipart/form-data',
   },
 });
+
+export const createOrder = () => API.post('/orders');
+export const getUserOrders = () => API.get('/orders/my-orders');
+export const getOrderDetails = (id) => API.get(`/orders/${id}`);
+
+export const getAllOrders = () => API.get('/orders/admin/all');
+export const updateOrderStatus = (id, data) => API.put(`/orders/${id}/status`, data);

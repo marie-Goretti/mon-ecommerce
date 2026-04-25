@@ -22,6 +22,7 @@ function Navbar() {
             <Link to="/cart" style={styles.link}>
               🛒 Panier {cart.length > 0 && <span style={styles.badge}>{cart.length}</span>}
             </Link>
+            <Link to="/orders" style={styles.link}>📦 Commandes</Link>
             <span style={styles.username}>👤 {user.name}</span>
             {user.role === 'admin' && (
               <Link to="/admin" style={{...styles.link, color: '#f39c12', fontWeight: 'bold'}}>⚙️ Admin</Link>

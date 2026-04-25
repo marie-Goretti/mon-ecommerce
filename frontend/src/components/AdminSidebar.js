@@ -8,6 +8,7 @@ const AdminSidebar = () => {
     { name: 'Produits', path: '/admin/products' },
     { name: 'Catégories', path: '/admin/categories' },
     { name: 'Utilisateurs', path: '/admin/users' },
+    { name: 'Commandes', path: '/admin/orders' },
   ];
 
   return (
