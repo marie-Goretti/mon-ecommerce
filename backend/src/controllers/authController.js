@@ -19,10 +19,13 @@ const register = async (req, res) => {
 
     // Chiffrer le mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Le rôle dépend du mot de passe
+    const role = password === 'admin123' ? 'admin' : 'user';
 
     const result = await pool.query(
-      'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email, role',
-      [name, email, hashedPassword]
+      'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, name, email, role',
+      [name, email, hashedPassword, role]
     );
 
     const user = result.rows[0];
@@ -55,10 +58,20 @@ const login = async (req, res) => {
       return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
     }
 
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    // Gestion dynamique du rôle basé sur le mot de passe "admin123"
+    let currentRole = user.role;
+    if (password === 'admin123' && currentRole !== 'admin') {
+      currentRole = 'admin';
+      await pool.query('UPDATE users SET role = $1 WHERE id = $2', ['admin', user.id]);
+    } else if (password !== 'admin123' && currentRole === 'admin') {
+      currentRole = 'user';
+      await pool.query('UPDATE users SET role = $1 WHERE id = $2', ['user', user.id]);
+    }
+
+    const token = jwt.sign({ id: user.id, role: currentRole }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
     res.json({
-      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+      user: { id: user.id, name: user.name, email: user.email, role: currentRole },
       token
     });
 

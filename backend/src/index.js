@@ -12,6 +12,8 @@ app.use(express.json());
 app.use('/api/products', require('./routes/products'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/cart', require('./routes/cart'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/categories', require('./routes/categories'));
 
 // Health check
 app.get('/api/health', (req, res) => {
