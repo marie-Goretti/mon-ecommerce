@@ -34,3 +34,9 @@ export const deleteCategory = (id) => API.delete(`/categories/${id}`);
 export const getUsers = () => API.get('/users');
 export const updateUserRole = (id, data) => API.put(`/users/${id}/role`, data);
 export const deleteUser = (id) => API.delete(`/users/${id}`);
+
+export const uploadImage = (formData) => API.post('/upload', formData, {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+});

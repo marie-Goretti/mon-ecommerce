@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getProducts, createProduct, updateProduct, deleteProduct, getCategories } from '../../api';
+import { getProducts, createProduct, updateProduct, deleteProduct, getCategories, uploadImage } from '../../api';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -11,7 +11,7 @@ const AdminProducts = () => {
     name: '',
     description: '',
     price: '',
-    category: '',
+    category_id: '',
     image_url: '',
     stock: ''
   });
@@ -46,12 +46,12 @@ const AdminProducts = () => {
         name: product.name,
         description: product.description || '',
         price: product.price,
-        category: product.category,
+        category_id: product.category_id || '',
         image_url: product.image_url || '',
         stock: product.stock || 0
       });
     } else {
-      setFormData({ name: '', description: '', price: '', category: '', image_url: '', stock: 0 });
+      setFormData({ name: '', description: '', price: '', category_id: '', image_url: '', stock: 0 });
     }
     setIsModalOpen(true);
   };
@@ -63,6 +63,21 @@ const AdminProducts = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const uploadData = new FormData();
+    uploadData.append('image', file);
+    
+    try {
+      const res = await uploadImage(uploadData);
+      setFormData({ ...formData, image_url: res.data.imageUrl });
+    } catch (error) {
+      alert("Erreur lors de l'upload de l'image");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -138,13 +153,21 @@ const AdminProducts = () => {
               <input type="text" name="name" placeholder="Nom" value={formData.name} onChange={handleChange} required />
               <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} />
               <input type="number" name="price" placeholder="Prix" value={formData.price} onChange={handleChange} required />
-              <select name="category" value={formData.category} onChange={handleChange} required>
+              <select name="category_id" value={formData.category_id} onChange={handleChange} required>
                 <option value="">Sélectionner une catégorie</option>
                 {categories.map(cat => (
-                  <option key={cat.id} value={cat.name}>{cat.name}</option>
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
-              <input type="text" name="image_url" placeholder="URL de l'image" value={formData.image_url} onChange={handleChange} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <label style={{ fontSize: '14px', color: '#7f8c8d' }}>Image du produit</label>
+                <input type="file" accept="image/*" onChange={handleImageUpload} />
+                {formData.image_url && (
+                  <div style={{ marginTop: '10px' }}>
+                    <img src={formData.image_url} alt="Aperçu" style={{ width: '100px', borderRadius: '4px', objectFit: 'cover' }} />
+                  </div>
+                )}
+              </div>
               <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} required />
               
               <div className="modal-actions">

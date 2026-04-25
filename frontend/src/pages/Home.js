@@ -1,18 +1,30 @@
 import { useState, useEffect } from 'react';
-import { getProducts } from '../api';
+import { getProducts, getCategories } from '../api';
 import ProductCard from '../components/ProductCard';
-
-const CATEGORIES = ['Tous', 'Électronique', 'Sport', 'Livres', 'Vêtements', 'Maison'];
 
 function Home() {
   const [products, setProducts] = useState([]);
+  const [categoriesList, setCategoriesList] = useState(['Tous']);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('Tous');
 
   useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
     fetchProducts();
   }, [search, category]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await getCategories();
+      setCategoriesList(['Tous', ...res.data.map(cat => cat.name)]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -46,7 +58,7 @@ function Home() {
 
       {/* Filtres catégories */}
       <div style={styles.categories}>
-        {CATEGORIES.map(cat => (
+        {categoriesList.map(cat => (
           <button
             key={cat}
             onClick={() => setCategory(cat)}
