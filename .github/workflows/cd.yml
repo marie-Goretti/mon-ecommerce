@@ -11,17 +11,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
       - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push Backend
         working-directory: ./backend
@@ -42,21 +42,13 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Login ECR
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_BACKEND_URL }}
-
-            # Pull nouvelles images
             docker pull ${{ secrets.ECR_BACKEND_URL }}:latest
             docker pull ${{ secrets.ECR_FRONTEND_URL }}:latest
-
-            # Redémarrer les containers
             cd /home/ec2-user
             docker-compose down
             docker-compose up -d
-
-            # Vérifier
             docker ps
 
       - name: Notify success
-        run: |
-          echo "✅ Déploiement réussi sur http://${{ secrets.EC2_HOST }}"
+        run: echo "✅ Déploiement réussi sur http://${{ secrets.EC2_HOST }}"
