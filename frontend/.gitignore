@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+infrastructure/terraform/ec2-key
+infrastructure/terraform/terraform.tfvars
+infrastructure/terraform/.terraform/

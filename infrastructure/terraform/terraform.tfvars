@@ -1,0 +1,6 @@
+aws_region   = "us-east-1"
+project_name = "mon-ecommerce"
+db_username  = "ecommerceuser"
+db_password  = "MonMotDePasse123!"
+jwt_secret   = "monsecretjwt123"
+database_url = "postgresql://neondb_owner:npg_f2KChvw8QeGI@ep-long-rain-ab52df1i-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
