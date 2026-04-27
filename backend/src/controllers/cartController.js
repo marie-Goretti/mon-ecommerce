@@ -21,6 +21,20 @@ const addToCart = async (req, res) => {
   try {
     const { product_id, quantity = 1 } = req.body;
 
+    // Vérifier le stock disponible
+    const productRes = await pool.query('SELECT stock FROM products WHERE id = $1', [product_id]);
+    if (productRes.rows.length === 0) {
+      return res.status(404).json({ error: 'Produit non trouvé' });
+    }
+    const stockAvailable = productRes.rows[0].stock;
+    
+    if (stockAvailable < quantity) {
+      return res.status(400).json({ error: 'Stock insuffisant' });
+    }
+
+    // Décrémenter le stock
+    await pool.query('UPDATE products SET stock = stock - $1 WHERE id = $2', [quantity, product_id]);
+
     // Si le produit est déjà dans le panier, augmenter la quantité
     const existing = await pool.query(
       'SELECT * FROM cart_items WHERE user_id = $1 AND product_id = $2',
@@ -49,11 +63,21 @@ const addToCart = async (req, res) => {
 const removeFromCart = async (req, res) => {
   try {
     const { id } = req.params;
-    await pool.query(
-      'DELETE FROM cart_items WHERE id = $1 AND user_id = $2',
-      [id, req.user.id]
-    );
-    res.json({ message: 'Produit retiré du panier ✅' });
+    
+    // Récupérer les infos de l'article pour recréditer le stock
+    const cartItemRes = await pool.query('SELECT product_id, quantity FROM cart_items WHERE id = $1 AND user_id = $2', [id, req.user.id]);
+    
+    if (cartItemRes.rows.length > 0) {
+      const { product_id, quantity } = cartItemRes.rows[0];
+      // Recréditer le stock
+      await pool.query('UPDATE products SET stock = stock + $1 WHERE id = $2', [quantity, product_id]);
+      
+      // Supprimer du panier
+      await pool.query('DELETE FROM cart_items WHERE id = $1', [id]);
+      res.json({ message: 'Produit retiré du panier ✅' });
+    } else {
+      res.status(404).json({ error: 'Article non trouvé dans le panier' });
+    }
   } catch (error) {
     res.status(500).json({ error: 'Erreur serveur' });
   }

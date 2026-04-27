@@ -2,12 +2,18 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProduct, addToCart } from '../api';
 import { useApp } from '../context/AppContext';
+import { Truck, RotateCcw } from 'lucide-react';
 
 function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  
+  const [quantity, setQuantity] = useState(1);
+  const [selectedColor, setSelectedColor] = useState(0);
+  const colors = ['#f87171', '#4b5563', '#a7f3d0', '#e5e7eb', '#3b82f6'];
+
   const { user, fetchCart } = useApp();
   const navigate = useNavigate();
 
@@ -25,15 +31,32 @@ function ProductDetail() {
     fetch();
   }, [id]);
 
+  const handleQuantity = (delta) => {
+    setQuantity(prev => {
+      const newQ = prev + delta;
+      if (newQ < 1) return 1;
+      if (product && newQ > product.stock) return product.stock;
+      return newQ;
+    });
+  };
+
   const handleAddToCart = async () => {
     if (!user) return navigate('/login');
+    if (product.stock < quantity) {
+      setMessage('❌ Stock insuffisant');
+      return;
+    }
     try {
-      await addToCart({ product_id: product.id, quantity: 1 });
+      await addToCart({ product_id: product.id, quantity });
       await fetchCart();
+      // Decrease local stock
+      setProduct({ ...product, stock: product.stock - quantity });
+      setQuantity(1); // Reset quantity
       setMessage('✅ Ajouté au panier !');
       setTimeout(() => setMessage(''), 2000);
     } catch (err) {
-      setMessage('❌ Erreur');
+      setMessage('❌ ' + (err.response?.data?.error || 'Erreur'));
+      setTimeout(() => setMessage(''), 3000);
     }
   };
 
@@ -42,19 +65,98 @@ function ProductDetail() {
 
   return (
     <div style={styles.container}>
-      <button onClick={() => navigate(-1)} style={styles.back}>← Retour</button>
-      <div style={styles.card}>
-        <img src={product.image_url} alt={product.name} style={styles.image} />
+      <div style={styles.breadcrumb}>
+        Boutique / {product.category || 'Catégorie'} / <strong>{product.name}</strong>
+      </div>
+      
+      <div style={styles.content}>
+        {/* Left side: Images */}
+        <div style={styles.gallery}>
+          <div style={styles.mainImageContainer}>
+            <img src={product.image_url} alt={product.name} style={styles.mainImage} />
+          </div>
+          <div style={styles.thumbnails}>
+            {[1, 2, 3, 4].map((item, index) => (
+              <div key={index} style={styles.thumbnailBox}>
+                <img src={product.image_url} alt="thumbnail" style={styles.thumbnail} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right side: Info */}
         <div style={styles.info}>
-          <span style={styles.category}>{product.category}</span>
           <h1 style={styles.name}>{product.name}</h1>
-          <p style={styles.description}>{product.description}</p>
-          <p style={styles.price}>{parseFloat(product.price).toFixed(2)} €</p>
-          <p style={styles.stock}>Stock disponible : {product.stock}</p>
+          <p style={styles.description}>
+            {product.description || "A perfect balance of exhilarating high-fidelity audio and the effortless magic of audio."}
+          </p>
+          <div style={styles.rating}>
+            ⭐⭐⭐⭐⭐ <span style={{color: '#888', fontSize: '13px'}}>(121)</span>
+          </div>
+
+          <div style={styles.priceContainer}>
+            <span style={styles.price}>${parseFloat(product.price).toFixed(2)}</span>
+            <span style={styles.priceSub}> or ${(parseFloat(product.price)/6).toFixed(2)}/month</span>
+          </div>
+          <p style={styles.priceDesc}>Suggested payments with 6 months special financing</p>
+
+          <div style={styles.colorSection}>
+            <p style={styles.sectionTitle}>Choose a Color</p>
+            <div style={styles.colorOptions}>
+              {colors.map((col, idx) => (
+                <div 
+                  key={idx} 
+                  onClick={() => setSelectedColor(idx)}
+                  style={{
+                    ...styles.colorCircle, 
+                    backgroundColor: col,
+                    border: selectedColor === idx ? '2px solid #222' : '2px solid transparent',
+                    outline: selectedColor === idx ? '2px solid #fff' : 'none',
+                    outlineOffset: '-4px',
+                    boxShadow: selectedColor === idx ? '0 0 0 2px #222' : '0 0 0 1px #eee'
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div style={styles.actionRow}>
+            <div style={styles.quantitySelector}>
+              <button onClick={() => handleQuantity(-1)} style={styles.qtyBtn}>-</button>
+              <span style={styles.qtyValue}>{quantity}</span>
+              <button onClick={() => handleQuantity(1)} style={styles.qtyBtn}>+</button>
+            </div>
+            <div style={styles.stockAlert}>
+              <span style={{color: '#f97316', fontWeight: 'bold'}}>Only <span style={{color: 'red'}}>{product.stock} items</span> left!</span><br/>
+              <span style={{color: '#666'}}>Don't miss it</span>
+            </div>
+          </div>
+
           {message && <p style={styles.message}>{message}</p>}
-          <button onClick={handleAddToCart} style={styles.btn}>
-            🛒 Ajouter au panier
-          </button>
+
+          <div style={styles.buttons}>
+            <button style={styles.buyNowBtn}>Buy Now</button>
+            <button onClick={handleAddToCart} style={styles.addToCartBtn}>Add to Cart</button>
+          </div>
+
+          <div style={styles.deliveryBox}>
+            <div style={styles.deliveryRow}>
+              <Truck size={24} color="#f97316" />
+              <div>
+                <p style={styles.deliveryTitle}>Free Delivery</p>
+                <p style={styles.deliverySub}>Enter your Postal code for Delivery Availability</p>
+              </div>
+            </div>
+            <div style={styles.deliveryDivider} />
+            <div style={styles.deliveryRow}>
+              <RotateCcw size={24} color="#f97316" />
+              <div>
+                <p style={styles.deliveryTitle}>Return Delivery</p>
+                <p style={styles.deliverySub}>Free 30days Delivery Returns. <a href="#details" style={{textDecoration: 'underline'}}>Details</a></p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -62,19 +164,42 @@ function ProductDetail() {
 }
 
 const styles = {
-  container: { maxWidth: '900px', margin: '30px auto', padding: '0 20px' },
-  back: { background: 'none', border: 'none', fontSize: '15px', color: '#666', marginBottom: '20px', cursor: 'pointer' },
-  card: { display: 'flex', gap: '40px', background: 'white', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' },
-  image: { width: '400px', height: '400px', objectFit: 'cover' },
-  info: { padding: '40px', flex: 1 },
-  category: { fontSize: '12px', textTransform: 'uppercase', color: '#e94560', fontWeight: 'bold', letterSpacing: '1px' },
-  name: { fontSize: '26px', margin: '10px 0', color: '#1a1a2e' },
-  description: { color: '#666', lineHeight: '1.6', marginBottom: '20px' },
-  price: { fontSize: '28px', fontWeight: 'bold', color: '#1a1a2e', marginBottom: '10px' },
-  stock: { color: '#aaa', fontSize: '14px', marginBottom: '20px' },
-  message: { background: '#f0fff4', color: '#2e7d32', padding: '10px', borderRadius: '8px', marginBottom: '16px' },
-  btn: { background: '#e94560', color: 'white', border: 'none', padding: '14px 30px', borderRadius: '10px', fontSize: '16px', fontWeight: 'bold' },
-  loading: { textAlign: 'center', padding: '60px', color: '#888' }
+  container: { maxWidth: '1100px', margin: '40px auto', padding: '0 20px' },
+  loading: { textAlign: 'center', padding: '60px', color: '#888' },
+  breadcrumb: { color: '#888', fontSize: '13px', marginBottom: '30px' },
+  content: { display: 'flex', gap: '50px', alignItems: 'flex-start' },
+  gallery: { flex: '1', minWidth: '400px' },
+  mainImageContainer: { background: '#f8f9fa', borderRadius: '16px', padding: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '16px' },
+  mainImage: { width: '100%', maxHeight: '400px', objectFit: 'contain' },
+  thumbnails: { display: 'flex', gap: '12px' },
+  thumbnailBox: { flex: 1, background: '#f8f9fa', borderRadius: '12px', padding: '10px', height: '80px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid #eee', cursor: 'pointer' },
+  thumbnail: { width: '100%', height: '100%', objectFit: 'contain' },
+  info: { flex: '1.2' },
+  name: { fontSize: '32px', fontWeight: '800', color: '#111', margin: '0 0 10px 0' },
+  description: { fontSize: '14px', color: '#666', lineHeight: '1.5', marginBottom: '12px' },
+  rating: { marginBottom: '20px' },
+  priceContainer: { display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' },
+  price: { fontSize: '24px', fontWeight: '800', color: '#111' },
+  priceSub: { fontSize: '16px', fontWeight: '600', color: '#111' },
+  priceDesc: { fontSize: '12px', color: '#888', marginBottom: '30px' },
+  sectionTitle: { fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#111' },
+  colorSection: { marginBottom: '30px' },
+  colorOptions: { display: 'flex', gap: '15px' },
+  colorCircle: { width: '28px', height: '28px', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.2s' },
+  actionRow: { display: 'flex', alignItems: 'center', gap: '30px', marginBottom: '30px' },
+  quantitySelector: { display: 'flex', alignItems: 'center', background: '#f8f9fa', borderRadius: '30px', padding: '5px 15px', border: '1px solid #eee' },
+  qtyBtn: { background: 'none', border: 'none', fontSize: '20px', color: '#111', cursor: 'pointer', padding: '0 10px' },
+  qtyValue: { fontSize: '16px', fontWeight: '600', minWidth: '30px', textAlign: 'center' },
+  stockAlert: { fontSize: '13px' },
+  message: { color: 'red', fontWeight: 'bold', marginBottom: '15px' },
+  buttons: { display: 'flex', gap: '15px', marginBottom: '40px' },
+  buyNowBtn: { flex: 1, background: '#064e3b', color: 'white', border: 'none', borderRadius: '30px', padding: '15px', fontSize: '16px', fontWeight: '700', cursor: 'pointer' },
+  addToCartBtn: { flex: 1, background: 'white', color: '#111', border: '1px solid #ccc', borderRadius: '30px', padding: '15px', fontSize: '16px', fontWeight: '700', cursor: 'pointer' },
+  deliveryBox: { border: '1px solid #eee', borderRadius: '12px', padding: '20px' },
+  deliveryRow: { display: 'flex', gap: '15px', alignItems: 'flex-start' },
+  deliveryDivider: { height: '1px', background: '#eee', margin: '20px 0' },
+  deliveryTitle: { fontSize: '14px', fontWeight: '600', color: '#111', marginBottom: '4px' },
+  deliverySub: { fontSize: '12px', color: '#666' }
 };
 
 export default ProductDetail;

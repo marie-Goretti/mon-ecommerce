@@ -1,10 +1,44 @@
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { getProducts } from '../api';
 import { Search, ShoppingCart, User, Settings, LogOut } from 'lucide-react';
 
 function Navbar() {
   const { user, cart, logoutUser } = useApp();
   const navigate = useNavigate();
+  
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsSearchOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (searchQuery.length > 1) {
+      const fetchSearchResults = async () => {
+        try {
+          const res = await getProducts({ search: searchQuery });
+          setSearchResults(res.data.slice(0, 5)); // max 5
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      const timer = setTimeout(fetchSearchResults, 300);
+      return () => clearTimeout(timer);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
 
   const handleLogout = () => {
     logoutUser();
@@ -30,7 +64,34 @@ function Navbar() {
 
       {/* Right: Icons & User Actions */}
       <div style={styles.iconsContainer}>
-        <Search size={20} style={styles.icon} />
+        <div style={styles.searchWrapper} ref={searchRef}>
+          <Search size={20} style={styles.icon} onClick={() => setIsSearchOpen(!isSearchOpen)} />
+          {isSearchOpen && (
+            <div style={styles.searchDropdown}>
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={styles.searchInput}
+                autoFocus
+              />
+              {searchResults.length > 0 && (
+                <div style={styles.resultsList}>
+                  {searchResults.map(prod => (
+                    <Link key={prod.id} to={`/products/${prod.id}`} style={styles.resultItem} onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}>
+                      <img src={prod.image_url} alt={prod.name} style={styles.resultImg} />
+                      <div style={styles.resultInfo}>
+                        <div style={styles.resultName}>{prod.name}</div>
+                        <div style={styles.resultPrice}>{parseFloat(prod.price).toFixed(2)} €</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         
         {user ? (
           <>
@@ -110,6 +171,66 @@ const styles = {
     position: 'relative',
     display: 'flex',
     alignItems: 'center'
+  },
+  searchWrapper: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  searchDropdown: {
+    position: 'absolute',
+    top: '40px',
+    right: 0,
+    background: 'white',
+    borderRadius: '12px',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+    padding: '10px',
+    width: '300px',
+    zIndex: 1000
+  },
+  searchInput: {
+    width: '100%',
+    padding: '10px 15px',
+    borderRadius: '8px',
+    border: '1px solid #eee',
+    outline: 'none',
+    fontSize: '14px',
+    background: '#f8f9fa'
+  },
+  resultsList: {
+    marginTop: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '5px'
+  },
+  resultItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '8px',
+    borderRadius: '8px',
+    textDecoration: 'none',
+    color: 'inherit',
+    transition: 'background 0.2s',
+  },
+  resultImg: {
+    width: '40px',
+    height: '40px',
+    borderRadius: '6px',
+    objectFit: 'cover'
+  },
+  resultInfo: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  resultName: {
+    fontSize: '14px',
+    fontWeight: '500'
+  },
+  resultPrice: {
+    fontSize: '12px',
+    color: 'var(--accent)',
+    fontWeight: 'bold'
   },
   icon: {
     color: 'var(--text-dark)',

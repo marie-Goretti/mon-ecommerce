@@ -1,18 +1,51 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Heart, ChevronRight } from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import { addToCart } from '../api';
 
 function ProductCard({ product }) {
+  const { user, fetchCart } = useApp();
+  const navigate = useNavigate();
+
+  const handleAddToCart = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) return navigate('/login');
+    try {
+      await addToCart({ product_id: product.id, quantity: 1 });
+      await fetchCart();
+      alert('Ajouté au panier !');
+    } catch (err) {
+      alert(err.response?.data?.error || 'Erreur lors de l\'ajout');
+    }
+  };
+
   return (
     <Link to={`/products/${product.id}`} style={styles.card}>
       <div style={styles.imageContainer}>
+        <div style={styles.heartIcon}>
+          <Heart size={16} color="#666" />
+        </div>
         <img src={product.image_url} alt={product.name} style={styles.image} />
       </div>
       <div style={styles.info}>
-        <span style={styles.category}>{product.category}</span>
         <h3 style={styles.name}>{product.name}</h3>
-        <p style={styles.description}>{product.description}</p>
+        <p style={styles.description}>
+          {product.description.length > 60 ? product.description.substring(0, 60) + '...' : product.description}
+        </p>
+        
+        {/* Fake color dots */}
+        <div style={styles.colors}>
+          <div style={{...styles.colorDot, background: '#e0e0e0', border: '1px solid #ccc'}}></div>
+          <div style={{...styles.colorDot, background: '#222'}}></div>
+          <div style={{...styles.colorDot, background: '#3b4371'}}></div>
+        </div>
+
         <div style={styles.footer}>
-          <span style={styles.price}>{parseFloat(product.price).toFixed(2)} €</span>
-          <span style={styles.stock}>Stock : {product.stock}</span>
+          <span style={styles.price}>${parseFloat(product.price).toFixed(2)}</span>
+          <button onClick={handleAddToCart} style={styles.addBtn}>
+            Add to cart <ChevronRight size={14} />
+          </button>
         </div>
       </div>
     </Link>
@@ -24,60 +57,96 @@ const styles = {
     background: 'white',
     borderRadius: '16px',
     overflow: 'hidden',
-    boxShadow: '0 4px 15px rgba(0,0,0,0.03)',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.04)',
     transition: 'transform 0.2s, box-shadow 0.2s',
-    display: 'block',
+    display: 'flex',
+    flexDirection: 'column',
     color: 'inherit',
-    border: '1px solid #f0f0f0',
-    padding: '16px'
+    border: '1px solid #f9f9f9',
+    padding: '16px',
+    textDecoration: 'none'
   },
   imageContainer: {
-    background: '#f4f6f8',
+    background: '#f8f9fa',
     borderRadius: '12px',
     padding: '20px',
     marginBottom: '16px',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    position: 'relative',
+    height: '200px'
+  },
+  heartIcon: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    background: 'white',
+    borderRadius: '50%',
+    width: '30px',
+    height: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
   },
   image: {
     width: '100%',
-    height: '180px',
+    height: '100%',
     objectFit: 'contain'
   },
   info: {
-    padding: '0 8px'
-  },
-  category: {
-    fontSize: '12px',
-    color: 'var(--text-light)',
-    fontWeight: '500',
-    marginBottom: '6px',
-    display: 'block'
+    padding: '0 4px',
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1
   },
   name: {
     fontSize: '18px',
-    margin: '0 0 8px 0',
-    color: 'var(--text-dark)',
-    fontWeight: '600'
+    margin: '0 0 6px 0',
+    color: '#2d3748',
+    fontWeight: '700'
   },
   description: {
-    display: 'none' // Hide description on grid view for cleaner look
+    fontSize: '13px',
+    color: '#718096',
+    lineHeight: '1.4',
+    marginBottom: '12px'
+  },
+  colors: {
+    display: 'flex',
+    gap: '6px',
+    marginBottom: '16px',
+    marginTop: 'auto'
+  },
+  colorDot: {
+    width: '16px',
+    height: '16px',
+    borderRadius: '50%',
+    cursor: 'pointer'
   },
   footer: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: '12px'
+    alignItems: 'center'
   },
   price: {
-    fontSize: '18px',
-    fontWeight: '700',
-    color: 'var(--primary)'
+    fontSize: '20px',
+    fontWeight: '800',
+    color: '#2d3748'
   },
-  stock: {
-    fontSize: '12px',
-    color: '#aaa'
+  addBtn: {
+    background: 'var(--accent)',
+    color: 'white',
+    border: 'none',
+    padding: '8px 16px',
+    borderRadius: '8px',
+    fontSize: '13px',
+    fontWeight: '700',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    cursor: 'pointer'
   }
 };
 
