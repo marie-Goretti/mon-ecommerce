@@ -11,8 +11,6 @@ function ProductDetail() {
   const [message, setMessage] = useState('');
   
   const [quantity, setQuantity] = useState(1);
-  const [selectedColor, setSelectedColor] = useState(0);
-  const colors = ['#f87171', '#4b5563', '#a7f3d0', '#e5e7eb', '#3b82f6'];
 
   const { user, fetchCart } = useApp();
   const navigate = useNavigate();
@@ -100,25 +98,7 @@ function ProductDetail() {
           </div>
           <p style={styles.priceDesc}>Suggested payments with 6 months special financing</p>
 
-          <div style={styles.colorSection}>
-            <p style={styles.sectionTitle}>Choose a Color</p>
-            <div style={styles.colorOptions}>
-              {colors.map((col, idx) => (
-                <div 
-                  key={idx} 
-                  onClick={() => setSelectedColor(idx)}
-                  style={{
-                    ...styles.colorCircle, 
-                    backgroundColor: col,
-                    border: selectedColor === idx ? '2px solid #222' : '2px solid transparent',
-                    outline: selectedColor === idx ? '2px solid #fff' : 'none',
-                    outlineOffset: '-4px',
-                    boxShadow: selectedColor === idx ? '0 0 0 2px #222' : '0 0 0 1px #eee'
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+
 
           <div style={styles.actionRow}>
             <div style={styles.quantitySelector}>
@@ -183,9 +163,6 @@ const styles = {
   priceSub: { fontSize: '16px', fontWeight: '600', color: '#111' },
   priceDesc: { fontSize: '12px', color: '#888', marginBottom: '30px' },
   sectionTitle: { fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#111' },
-  colorSection: { marginBottom: '30px' },
-  colorOptions: { display: 'flex', gap: '15px' },
-  colorCircle: { width: '28px', height: '28px', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.2s' },
   actionRow: { display: 'flex', alignItems: 'center', gap: '30px', marginBottom: '30px' },
   quantitySelector: { display: 'flex', alignItems: 'center', background: '#f8f9fa', borderRadius: '30px', padding: '5px 15px', border: '1px solid #eee' },
   qtyBtn: { background: 'none', border: 'none', fontSize: '20px', color: '#111', cursor: 'pointer', padding: '0 10px' },

@@ -29,17 +29,10 @@ function ProductCard({ product }) {
         <img src={product.image_url} alt={product.name} style={styles.image} />
       </div>
       <div style={styles.info}>
-        <h3 style={styles.name}>{product.name}</h3>
-        <p style={styles.description}>
-          {product.description.length > 60 ? product.description.substring(0, 60) + '...' : product.description}
+        <h3 style={styles.name} title={product.name}>{product.name}</h3>
+        <p style={styles.description} title={product.description}>
+          {product.description}
         </p>
-
-        {/* Fake color dots */}
-        <div style={styles.colors}>
-          <div style={{ ...styles.colorDot, background: '#e0e0e0', border: '1px solid #ccc' }}></div>
-          <div style={{ ...styles.colorDot, background: '#222' }}></div>
-          <div style={{ ...styles.colorDot, background: '#3b4371' }}></div>
-        </div>
 
         <div style={styles.footer}>
           <span style={styles.price}>${parseFloat(product.price).toFixed(2)}</span>
@@ -63,16 +56,20 @@ const styles = {
     flexDirection: 'column',
     color: 'inherit',
     border: '1px solid #f9f9f9',
+    padding: '16px',
     textDecoration: 'none'
   },
   imageContainer: {
     background: '#f8f9fa',
+    borderRadius: '12px',
     marginBottom: '16px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    height: '200px'
+    aspectRatio: '1 / 1',
+    width: '100%',
+    overflow: 'hidden'
   },
   heartIcon: {
     position: 'absolute',
@@ -93,7 +90,7 @@ const styles = {
     objectFit: 'cover'
   },
   info: {
-    padding: '0 16px 16px 16px',
+    padding: '0 4px',
     display: 'flex',
     flexDirection: 'column',
     flex: 1
@@ -102,26 +99,23 @@ const styles = {
     fontSize: '18px',
     margin: '0 0 6px 0',
     color: '#2d3748',
-    fontWeight: '700'
+    fontWeight: '700',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   description: {
     fontSize: '13px',
     color: '#718096',
     lineHeight: '1.4',
-    marginBottom: '12px'
+    marginBottom: '12px',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
-  colors: {
-    display: 'flex',
-    gap: '6px',
-    marginBottom: '16px',
-    marginTop: 'auto'
-  },
-  colorDot: {
-    width: '16px',
-    height: '16px',
-    borderRadius: '50%',
-    cursor: 'pointer'
-  },
+
   footer: {
     display: 'flex',
     justifyContent: 'space-between',
