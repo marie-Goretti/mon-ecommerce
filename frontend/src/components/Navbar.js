@@ -67,14 +67,17 @@ function Navbar() {
         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Middle: Links */}
-      <div style={styles.links} className={`mobile-nav-links ${isMobileMenuOpen ? 'mobile-nav-menu' : 'mobile-hide'}`}>
-        <Link to="/" style={linkStyle('/')} onClick={() => setIsMobileMenuOpen(false)}>Accueil</Link>
-        <Link to="/shop" style={linkStyle('/shop')} onClick={() => setIsMobileMenuOpen(false)}>Boutique</Link>
-        <Link to="/about" style={linkStyle('/about')} onClick={() => setIsMobileMenuOpen(false)}>À propos</Link>
-        <Link to="/contact" style={linkStyle('/contact')} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
-        <Link to="/blog" style={linkStyle('/blog')} onClick={() => setIsMobileMenuOpen(false)}>Blog</Link>
-      </div>
+      {/* Right side wrapper for mobile menu */}
+      <div className={`nav-right-container ${isMobileMenuOpen ? 'mobile-nav-menu' : ''}`}>
+        
+        {/* Middle: Links */}
+        <div style={styles.links} className="mobile-nav-links">
+          <Link to="/" style={linkStyle('/')} onClick={() => setIsMobileMenuOpen(false)}>Accueil</Link>
+          <Link to="/shop" style={linkStyle('/shop')} onClick={() => setIsMobileMenuOpen(false)}>Boutique</Link>
+          <Link to="/about" style={linkStyle('/about')} onClick={() => setIsMobileMenuOpen(false)}>À propos</Link>
+          <Link to="/contact" style={linkStyle('/contact')} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+          <Link to="/blog" style={linkStyle('/blog')} onClick={() => setIsMobileMenuOpen(false)}>Blog</Link>
+        </div>
 
       {/* Right: Icons & User Actions */}
       <div style={styles.iconsContainer} className="mobile-nav-icons">
@@ -135,6 +138,7 @@ function Navbar() {
             <Link to="/register" className="btn-primary" style={{ fontSize: '13px', padding: '8px 16px' }}>S'inscrire</Link>
           </>
         )}
+      </div>
       </div>
     </nav>
   );

@@ -231,6 +231,10 @@ a {
 /* =========================================
    RESPONSIVE UTILITY CLASSES (MOBILE)
    ========================================= */
+.nav-right-container {
+  display: contents;
+}
+
 @media (max-width: 768px) {
   /* Layout Modifiers */
   .mobile-col {
@@ -292,7 +296,11 @@ a {
     cursor: pointer;
     color: var(--text-dark);
   }
-  .mobile-nav-menu {
+  .nav-right-container {
+    display: none;
+  }
+  .nav-right-container.mobile-nav-menu {
+    display: flex !important;
     position: absolute;
     top: 80px;
     left: 0;
@@ -311,12 +319,14 @@ a {
   }
   .mobile-nav-icons {
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
   }
   .mobile-search-wrapper {
-    order: 3;
     width: 100%;
-    margin-top: 10px;
   }
   .mobile-search-bar {
     width: 100% !important;
