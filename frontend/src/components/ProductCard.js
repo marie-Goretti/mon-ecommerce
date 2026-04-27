@@ -63,12 +63,10 @@ const styles = {
     flexDirection: 'column',
     color: 'inherit',
     border: '1px solid #f9f9f9',
-    padding: '16px',
     textDecoration: 'none'
   },
   imageContainer: {
     background: '#f8f9fa',
-    borderRadius: '12px',
     marginBottom: '16px',
     display: 'flex',
     justifyContent: 'center',
@@ -92,10 +90,10 @@ const styles = {
   image: {
     width: '100%',
     height: '100%',
-    objectFit: 'contain'
+    objectFit: 'cover'
   },
   info: {
-    padding: '0 4px',
+    padding: '0 16px 16px 16px',
     display: 'flex',
     flexDirection: 'column',
     flex: 1

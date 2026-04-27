@@ -53,14 +53,14 @@ function Home() {
     <div style={styles.container}>
       
       {/* Hero Section */}
-      <div style={styles.hero}>
+      <div style={{ ...styles.hero, backgroundImage: `url(${HeroSofa})` }}>
         <div style={styles.heroContent}>
           <div style={styles.heroTag}>IDÉES DE DESIGN DE MEUBLES</div>
           <h1 style={styles.heroTitle}>Découvrez Votre<br/>Espace Idéal</h1>
           <p style={styles.heroSub}>Choisir les bons meubles pour votre maison ajoutera élégance et fonctionnalité à votre intérieur, tout en reflétant votre style unique.</p>
           
           <div style={styles.heroActions}>
-            <Link to="/shop" style={styles.shopNowBtn}>ACHETER</Link>
+            <Link to="/shop" style={styles.shopNowBtn}>Acheter</Link>
             <a href="#instagram" style={styles.instaBtn}>Suivre Instagram</a>
           </div>
 
@@ -75,12 +75,9 @@ function Home() {
             </div>
             <div>
               <div style={styles.statNumber}>300+</div>
-              <div style={styles.statLabel}>Nouveautés</div>
+              <div style={styles.statLabel}>Boutiques Certifiées</div>
             </div>
           </div>
-        </div>
-        <div style={styles.heroImageContainer}>
-          <img src={HeroSofa} alt="Hero Sofa" style={styles.heroImage} />
         </div>
       </div>
 
@@ -209,7 +206,10 @@ const styles = {
     gap: '80px'
   },
   hero: {
-    background: '#163a4a', // Dark blue background
+    background: '#163a4a', // Dark blue background fallback
+    backgroundSize: 'cover',
+    backgroundPosition: 'right center',
+    backgroundRepeat: 'no-repeat',
     borderRadius: '24px',
     minHeight: '450px',
     display: 'flex',
@@ -289,21 +289,7 @@ const styles = {
     fontSize: '12px',
     color: '#aed1d6'
   },
-  heroImageContainer: {
-    position: 'absolute',
-    right: '-5%',
-    top: 0,
-    bottom: 0,
-    width: '60%',
-    zIndex: 1,
-    display: 'flex',
-    alignItems: 'center'
-  },
-  heroImage: {
-    width: '100%',
-    height: '110%',
-    objectFit: 'cover'
-  },
+
   features: {
     display: 'flex',
     justifyContent: 'space-between',
