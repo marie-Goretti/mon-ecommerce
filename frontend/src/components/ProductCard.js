@@ -33,12 +33,12 @@ function ProductCard({ product }) {
         <p style={styles.description}>
           {product.description.length > 60 ? product.description.substring(0, 60) + '...' : product.description}
         </p>
-        
+
         {/* Fake color dots */}
         <div style={styles.colors}>
-          <div style={{...styles.colorDot, background: '#e0e0e0', border: '1px solid #ccc'}}></div>
-          <div style={{...styles.colorDot, background: '#222'}}></div>
-          <div style={{...styles.colorDot, background: '#3b4371'}}></div>
+          <div style={{ ...styles.colorDot, background: '#e0e0e0', border: '1px solid #ccc' }}></div>
+          <div style={{ ...styles.colorDot, background: '#222' }}></div>
+          <div style={{ ...styles.colorDot, background: '#3b4371' }}></div>
         </div>
 
         <div style={styles.footer}>
@@ -69,7 +69,6 @@ const styles = {
   imageContainer: {
     background: '#f8f9fa',
     borderRadius: '12px',
-    padding: '20px',
     marginBottom: '16px',
     display: 'flex',
     justifyContent: 'center',
