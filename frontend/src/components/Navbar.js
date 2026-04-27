@@ -92,7 +92,7 @@ function Navbar() {
                     <img src={prod.image_url} alt={prod.name} style={styles.resultImg} />
                     <div style={styles.resultInfo}>
                       <div style={styles.resultName}>{prod.name}</div>
-                      <div style={styles.resultPrice}>{parseFloat(prod.price).toFixed(2)} €</div>
+                      <div style={styles.resultPrice}>{parseFloat(prod.price).toFixed(0)} FCFA</div>
                     </div>
                   </Link>
                 ))}

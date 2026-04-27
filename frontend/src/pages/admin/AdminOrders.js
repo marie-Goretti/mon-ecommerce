@@ -63,7 +63,7 @@ const AdminOrders = () => {
                   <small style={{color: '#888'}}>{order.user_email}</small>
                 </td>
                 <td>{new Date(order.created_at).toLocaleDateString()}</td>
-                <td>{order.total_amount} €</td>
+                <td>{parseFloat(order.total_amount).toFixed(0)} FCFA</td>
                 <td>
                   <span style={{
                     padding: '4px 8px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold', color: 'white',

@@ -60,7 +60,7 @@ function Cart() {
                   
                   <div style={styles.priceOption}>
                     <div style={styles.radioChecked}></div>
-                    <span>{parseFloat(item.price).toFixed(2)} €</span>
+                    <span>{parseFloat(item.price).toFixed(0)} FCFA</span>
                   </div>
                   
                   <div style={styles.quantitySelector}>
@@ -70,7 +70,7 @@ function Cart() {
                   </div>
                   
                   <div style={styles.itemTotal}>
-                    <div style={styles.totalPrice}>{(parseFloat(item.price) * item.quantity).toFixed(2)} €</div>
+                    <div style={styles.totalPrice}>{(parseFloat(item.price) * item.quantity).toFixed(0)} FCFA</div>
                   </div>
                 </div>
               ))}
@@ -98,19 +98,19 @@ function Cart() {
               
               <div style={styles.totalsRow}>
                 <span style={styles.totalsLabel}>Taxes (estimées)</span>
-                <span style={styles.totalsValue}>0.00 €</span>
+                <span style={styles.totalsValue}>0 FCFA</span>
               </div>
               
               <div style={styles.totalsRow}>
                 <span style={styles.totalsLabel}>Sous-total</span>
-                <span style={styles.totalsValue}>{subtotal.toFixed(2)} €</span>
+                <span style={styles.totalsValue}>{subtotal.toFixed(0)} FCFA</span>
               </div>
               
               <div style={styles.divider}></div>
               
               <div style={styles.finalTotalRow}>
                 <span style={styles.finalTotalLabel}>Total</span>
-                <span style={styles.finalTotalValue}>{subtotal.toFixed(2)} €</span>
+                <span style={styles.finalTotalValue}>{subtotal.toFixed(0)} FCFA</span>
               </div>
               
               <button onClick={handleCheckout} style={styles.checkoutBtn}>PASSER À LA CAISSE</button>

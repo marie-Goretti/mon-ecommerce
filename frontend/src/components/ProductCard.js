@@ -35,7 +35,7 @@ function ProductCard({ product }) {
         </p>
 
         <div style={styles.footer}>
-          <span style={styles.price}>${parseFloat(product.price).toFixed(2)}</span>
+          <span style={styles.price}>{parseFloat(product.price).toFixed(0)} FCFA</span>
           <button onClick={handleAddToCart} style={styles.addBtn}>
             Ajouter <ChevronRight size={14} />
           </button>

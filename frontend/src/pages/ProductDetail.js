@@ -93,8 +93,8 @@ function ProductDetail() {
           </div>
 
           <div style={styles.priceContainer}>
-            <span style={styles.price}>${parseFloat(product.price).toFixed(2)}</span>
-            <span style={styles.priceSub}> ou ${(parseFloat(product.price)/6).toFixed(2)}/mois</span>
+            <span style={styles.price}>{parseFloat(product.price).toFixed(0)} FCFA</span>
+            <span style={styles.priceSub}> ou {parseFloat(product.price/6).toFixed(0)} FCFA/mois</span>
           </div>
           <p style={styles.priceDesc}>Paiements suggérés avec un financement spécial sur 6 mois</p>
 

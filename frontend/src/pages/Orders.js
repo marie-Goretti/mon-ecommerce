@@ -56,7 +56,7 @@ function Orders() {
               </div>
               <div style={styles.body}>
                 <p><strong>Date :</strong> {new Date(order.created_at).toLocaleDateString()}</p>
-                <p><strong>Total :</strong> <span style={styles.price}>{order.total_amount} €</span></p>
+                <p><strong>Total :</strong> <span style={styles.price}>{parseFloat(order.total_amount).toFixed(0)} FCFA</span></p>
               </div>
             </div>
           ))}

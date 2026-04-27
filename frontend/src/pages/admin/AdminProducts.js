@@ -119,7 +119,7 @@ const AdminProducts = () => {
                   <img src={prod.image_url} alt={prod.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} />
                 </td>
                 <td>{prod.name}</td>
-                <td>{prod.price} €</td>
+                <td>{parseFloat(prod.price).toFixed(0)} FCFA</td>
                 <td>{prod.category}</td>
                 <td>{prod.stock}</td>
                 <td className="admin-actions">
