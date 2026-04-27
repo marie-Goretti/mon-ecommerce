@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getProducts, getCategories } from '../api';
 import ProductCard from '../components/ProductCard';
 import { ShoppingBag, Truck, Headphones, ShieldCheck, ArrowRight } from 'lucide-react';
@@ -54,8 +55,8 @@ function Home() {
       {/* Hero Section */}
       <div style={styles.hero}>
         <div style={styles.heroContent}>
-          <h1 style={styles.heroTitle}>Discover Your Perfect<br/>Space</h1>
-          <p style={styles.heroSub}>Explore our curated collection of elegant, contemporary pieces designed to elevate your living space.</p>
+          <h1 style={styles.heroTitle}>Découvrez Votre<br/>Espace Idéal</h1>
+          <p style={styles.heroSub}>Explorez notre collection de pièces élégantes et contemporaines conçues pour sublimer votre espace de vie.</p>
         </div>
         <img src={HeroSofa} alt="Hero Sofa" style={styles.heroImage} />
         {/* Curved cutout effect placeholder */}
@@ -66,19 +67,19 @@ function Home() {
       <div style={styles.features}>
         <div style={styles.featureBox}>
           <div style={styles.featureIcon}><ShoppingBag size={24} color="var(--primary)" /></div>
-          <p style={styles.featureText}>Easy For Shopping</p>
+          <p style={styles.featureText}>Achats Faciles</p>
         </div>
         <div style={styles.featureBox}>
           <div style={styles.featureIcon}><Truck size={24} color="var(--primary)" /></div>
-          <p style={styles.featureText}>Fast & Free Shipping</p>
+          <p style={styles.featureText}>Livraison Rapide & Gratuite</p>
         </div>
         <div style={styles.featureBox}>
           <div style={styles.featureIcon}><Headphones size={24} color="var(--primary)" /></div>
-          <p style={styles.featureText}>24/7 Support</p>
+          <p style={styles.featureText}>Support 24/7</p>
         </div>
         <div style={styles.featureBox}>
           <div style={styles.featureIcon}><ShieldCheck size={24} color="var(--primary)" /></div>
-          <p style={styles.featureText}>Money Back Guarantee</p>
+          <p style={styles.featureText}>Satisfait ou Remboursé</p>
         </div>
       </div>
 
@@ -88,14 +89,14 @@ function Home() {
           <img src={FurnitureIdea} alt="Furniture Ideas" style={styles.ideasImage} />
         </div>
         <div style={styles.ideasContent}>
-          <div style={styles.ideasTag}>FURNITURE DESIGN IDEAS</div>
-          <h2 style={styles.ideasTitle}>Create the living room of your dreams</h2>
-          <p style={styles.ideasDesc}>Explore Athena's curated collection of mid-century contemporary pieces designed to create luxury and functional living spaces.</p>
+          <div style={styles.ideasTag}>IDÉES DE DÉCORATION</div>
+          <h2 style={styles.ideasTitle}>Créez le salon de vos rêves</h2>
+          <p style={styles.ideasDesc}>Explorez la collection d'Athena pour créer des espaces de vie luxueux et fonctionnels.</p>
           <div style={styles.ideasLinks}>
-            <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              Shop Now <ArrowRight size={16} />
-            </button>
-            <a href="#instagram" style={styles.ideasLink}>Follow Instagram</a>
+            <Link to="/shop" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', width: 'max-content' }}>
+              Acheter <ArrowRight size={16} />
+            </Link>
+            <a href="#instagram" style={styles.ideasLink}>Suivre sur Instagram</a>
           </div>
         </div>
       </div>
@@ -105,33 +106,33 @@ function Home() {
         <div style={styles.catCol}>
           <div style={styles.catCard}>
             <div style={styles.catText}>
-              <h3>Table</h3>
-              <p>Dining table</p>
-              <p>Coffee table</p>
-              <a href="#view">View All →</a>
+              <h3>Tables</h3>
+              <p>Table à manger</p>
+              <p>Table basse</p>
+              <Link to="/shop">Voir Tout →</Link>
             </div>
             <img src={TableImg} alt="Table" style={styles.catImage} />
           </div>
           <div style={{...styles.catCard, background: '#fdf1e4'}}>
             <div style={styles.catText}>
-              <h3>Light</h3>
-              <p>Chandelier</p>
-              <p>Pendant light</p>
-              <a href="#view">View All →</a>
+              <h3>Luminaires</h3>
+              <p>Lustres</p>
+              <p>Lampes suspendues</p>
+              <Link to="/shop">Voir Tout →</Link>
             </div>
             <img src={LightImg} alt="Light" style={styles.catImageSmall} />
           </div>
         </div>
         
         <div style={{...styles.catCol, justifyContent: 'space-between'}}>
-          <div style={{...styles.catCard, height: '65%', background: '#f4f6f8', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-            <h3 style={{marginBottom: '10px'}}>Chairs</h3>
+          <div style={{...styles.catCard, flex: 2, background: '#f4f6f8', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '24px'}}>
+            <h3 style={{marginBottom: '10px'}}>Chaises</h3>
             <img src={ChairImg} alt="Chair" style={{width: '60%', objectFit: 'contain'}} />
-            <a href="#view" style={{marginTop: '15px'}}>View All →</a>
+            <Link to="/shop" style={{marginTop: '15px'}}>Voir Tout →</Link>
           </div>
-          <div style={{...styles.catCard, height: '30%', background: 'var(--primary)', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-             <div style={{background: 'var(--accent)', padding: '5px 15px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', marginBottom: '10px'}}>GET DISCOUNT</div>
-             <h3 style={{fontSize: '24px'}}>30% OFFER</h3>
+          <div style={{...styles.catCard, flex: 1, background: 'var(--primary)', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+             <div style={{background: 'var(--accent)', padding: '5px 15px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', marginBottom: '10px'}}>PROMOTION</div>
+             <h3 style={{fontSize: '24px'}}>-30% DE RÉDUCTION</h3>
           </div>
         </div>
       </div>
@@ -139,7 +140,7 @@ function Home() {
       {/* Best Selling Products */}
       <div style={styles.bestSelling}>
         <div style={styles.bestSellingHeader}>
-          <h2 style={styles.sectionTitle}>Our Best Selling<br/>Product</h2>
+          <h2 style={styles.sectionTitle}>Nos Meilleures<br/>Ventes</h2>
         </div>
         
         {/* Categories Tabs */}
@@ -320,7 +321,7 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gap: '24px',
-    height: '500px'
+    minHeight: '600px'
   },
   catCol: {
     display: 'flex',

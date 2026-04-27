@@ -15,18 +15,17 @@ function Navbar() {
     <nav style={styles.nav}>
       {/* Left: Logo */}
       <div style={styles.logoContainer}>
-        <div style={styles.logoCircle}></div>
         <Link to="/" style={styles.logo}>Athena.</Link>
       </div>
 
       {/* Middle: Links */}
       <div style={styles.links}>
-        <Link to="/" style={{...styles.link, fontWeight: '600'}}>Home</Link>
-        <Link to="/" style={styles.link}>Shop</Link>
-        <Link to="/" style={styles.link}>Product</Link>
-        <Link to="/" style={styles.link}>About us</Link>
-        <Link to="/" style={styles.link}>Contact us</Link>
-        <Link to="/" style={styles.link}>Blog</Link>
+        <Link to="/" style={{...styles.link, fontWeight: '600'}}>Accueil</Link>
+        <Link to="/shop" style={styles.link}>Boutique</Link>
+        <Link to="/products" style={styles.link}>Produits</Link>
+        <Link to="/about" style={styles.link}>À propos</Link>
+        <Link to="/contact" style={styles.link}>Contact</Link>
+        <Link to="/blog" style={styles.link}>Blog</Link>
       </div>
 
       {/* Right: Icons & User Actions */}
@@ -57,8 +56,8 @@ function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/login" style={{...styles.link, fontSize: '14px', fontWeight: '500'}}>Login</Link>
-            <Link to="/register" className="btn-primary" style={{ fontSize: '13px', padding: '8px 16px' }}>Sign Up</Link>
+            <Link to="/login" style={{...styles.link, fontSize: '14px', fontWeight: '500'}}>Se connecter</Link>
+            <Link to="/register" className="btn-primary" style={{ fontSize: '13px', padding: '8px 16px' }}>S'inscrire</Link>
           </>
         )}
       </div>
@@ -84,16 +83,8 @@ const styles = {
     alignItems: 'center',
     gap: '10px'
   },
-  logoCircle: {
-    width: '30px',
-    height: '30px',
-    borderRadius: '50%',
-    background: '#ccc', // Placeholder for logo icon
-    backgroundImage: 'radial-gradient(circle, #e6b981 20%, transparent 20%), radial-gradient(circle, transparent 20%, #e6b981 20%, transparent 30%)',
-    backgroundSize: '10px 10px',
-    border: '1px solid #e6b981'
-  },
   logo: {
+    fontFamily: 'Surgena, sans-serif',
     fontSize: '24px',
     fontWeight: '700',
     color: 'var(--text-dark)',
