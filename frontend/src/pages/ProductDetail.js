@@ -86,7 +86,7 @@ function ProductDetail() {
         <div style={styles.info}>
           <h1 style={styles.name}>{product.name}</h1>
           <p style={styles.description}>
-            {product.description || "A perfect balance of exhilarating high-fidelity audio and the effortless magic of audio."}
+            {product.description || "Un équilibre parfait entre un son haute fidélité exaltant et la magie de l'audio sans effort."}
           </p>
           <div style={styles.rating}>
             ⭐⭐⭐⭐⭐ <span style={{color: '#888', fontSize: '13px'}}>(121)</span>
@@ -94,9 +94,9 @@ function ProductDetail() {
 
           <div style={styles.priceContainer}>
             <span style={styles.price}>${parseFloat(product.price).toFixed(2)}</span>
-            <span style={styles.priceSub}> or ${(parseFloat(product.price)/6).toFixed(2)}/month</span>
+            <span style={styles.priceSub}> ou ${(parseFloat(product.price)/6).toFixed(2)}/mois</span>
           </div>
-          <p style={styles.priceDesc}>Suggested payments with 6 months special financing</p>
+          <p style={styles.priceDesc}>Paiements suggérés avec un financement spécial sur 6 mois</p>
 
 
 
@@ -107,32 +107,32 @@ function ProductDetail() {
               <button onClick={() => handleQuantity(1)} style={styles.qtyBtn}>+</button>
             </div>
             <div style={styles.stockAlert}>
-              <span style={{color: '#f97316', fontWeight: 'bold'}}>Only <span style={{color: 'red'}}>{product.stock} items</span> left!</span><br/>
-              <span style={{color: '#666'}}>Don't miss it</span>
+              <span style={{color: '#f97316', fontWeight: 'bold'}}>Seulement <span style={{color: 'red'}}>{product.stock} articles</span> restants !</span><br/>
+              <span style={{color: '#666'}}>Ne le manquez pas</span>
             </div>
           </div>
 
           {message && <p style={styles.message}>{message}</p>}
 
           <div style={styles.buttons}>
-            <button style={styles.buyNowBtn}>Buy Now</button>
-            <button onClick={handleAddToCart} style={styles.addToCartBtn}>Add to Cart</button>
+            <button style={styles.buyNowBtn}>Acheter Maintenant</button>
+            <button onClick={handleAddToCart} style={styles.addToCartBtn}>Ajouter au Panier</button>
           </div>
 
           <div style={styles.deliveryBox}>
             <div style={styles.deliveryRow}>
               <Truck size={24} color="#f97316" />
               <div>
-                <p style={styles.deliveryTitle}>Free Delivery</p>
-                <p style={styles.deliverySub}>Enter your Postal code for Delivery Availability</p>
+                <p style={styles.deliveryTitle}>Livraison Gratuite</p>
+                <p style={styles.deliverySub}>Entrez votre code postal pour voir la disponibilité</p>
               </div>
             </div>
             <div style={styles.deliveryDivider} />
             <div style={styles.deliveryRow}>
               <RotateCcw size={24} color="#f97316" />
               <div>
-                <p style={styles.deliveryTitle}>Return Delivery</p>
-                <p style={styles.deliverySub}>Free 30days Delivery Returns. <a href="#details" style={{textDecoration: 'underline'}}>Details</a></p>
+                <p style={styles.deliveryTitle}>Retours</p>
+                <p style={styles.deliverySub}>Retours gratuits sous 30 jours. <a href="#details" style={{textDecoration: 'underline'}}>Détails</a></p>
               </div>
             </div>
           </div>

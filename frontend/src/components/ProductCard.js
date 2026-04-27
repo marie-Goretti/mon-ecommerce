@@ -31,13 +31,13 @@ function ProductCard({ product }) {
       <div style={styles.info}>
         <h3 style={styles.name} title={product.name}>{product.name}</h3>
         <p style={styles.description} title={product.description}>
-          {product.description}
+          {product.description && product.description.length > 60 ? product.description.substring(0, 60) + '...' : product.description}
         </p>
 
         <div style={styles.footer}>
           <span style={styles.price}>${parseFloat(product.price).toFixed(2)}</span>
           <button onClick={handleAddToCart} style={styles.addBtn}>
-            Add to cart <ChevronRight size={14} />
+            Ajouter <ChevronRight size={14} />
           </button>
         </div>
       </div>
@@ -108,12 +108,7 @@ const styles = {
     fontSize: '13px',
     color: '#718096',
     lineHeight: '1.4',
-    marginBottom: '12px',
-    display: '-webkit-box',
-    WebkitLineClamp: 2,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    marginBottom: '12px'
   },
 
   footer: {
