@@ -13,9 +13,9 @@ import LightImg from '../assets/light_category_1777292658502.png';
 
 function Home() {
   const [products, setProducts] = useState([]);
-  const [categoriesList, setCategoriesList] = useState(['All Products']);
+  const [categoriesList, setCategoriesList] = useState(['Tous les produits']);
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState('All Products');
+  const [category, setCategory] = useState('Tous les produits');
 
   useEffect(() => {
     fetchCategories();
@@ -28,7 +28,7 @@ function Home() {
   const fetchCategories = async () => {
     try {
       const res = await getCategories();
-      setCategoriesList(['All Products', ...res.data.map(cat => cat.name)]);
+      setCategoriesList(['Tous les produits', ...res.data.map(cat => cat.name)]);
     } catch (err) {
       console.error(err);
     }
@@ -38,8 +38,8 @@ function Home() {
     try {
       setLoading(true);
       const params = {};
-      // Handle the "Tous" matching from previous logic if needed, but let's use English now
-      if (category !== 'All Products') params.category = category;
+      // Handle the "Tous" matching
+      if (category !== 'Tous les produits') params.category = category;
       const res = await getProducts(params);
       setProducts(res.data);
     } catch (err) {
@@ -55,12 +55,33 @@ function Home() {
       {/* Hero Section */}
       <div style={styles.hero}>
         <div style={styles.heroContent}>
+          <div style={styles.heroTag}>IDÉES DE DESIGN DE MEUBLES</div>
           <h1 style={styles.heroTitle}>Découvrez Votre<br/>Espace Idéal</h1>
-          <p style={styles.heroSub}>Explorez notre collection de pièces élégantes et contemporaines conçues pour sublimer votre espace de vie.</p>
+          <p style={styles.heroSub}>Choisir les bons meubles pour votre maison ajoutera élégance et fonctionnalité à votre intérieur, tout en reflétant votre style unique.</p>
+          
+          <div style={styles.heroActions}>
+            <Link to="/shop" style={styles.shopNowBtn}>ACHETER</Link>
+            <a href="#instagram" style={styles.instaBtn}>Suivre Instagram</a>
+          </div>
+
+          <div style={styles.heroStats}>
+            <div>
+              <div style={styles.statNumber}>2500+</div>
+              <div style={styles.statLabel}>Styles Uniques</div>
+            </div>
+            <div>
+              <div style={styles.statNumber}>5000+</div>
+              <div style={styles.statLabel}>Clients Heureux</div>
+            </div>
+            <div>
+              <div style={styles.statNumber}>300+</div>
+              <div style={styles.statLabel}>Nouveautés</div>
+            </div>
+          </div>
         </div>
-        <img src={HeroSofa} alt="Hero Sofa" style={styles.heroImage} />
-        {/* Curved cutout effect placeholder */}
-        <div style={styles.heroCutout}></div>
+        <div style={styles.heroImageContainer}>
+          <img src={HeroSofa} alt="Hero Sofa" style={styles.heroImage} />
+        </div>
       </div>
 
       {/* Features Section */}
@@ -109,7 +130,7 @@ function Home() {
               <h3>Tables</h3>
               <p>Table à manger</p>
               <p>Table basse</p>
-              <Link to="/shop">Voir Tout →</Link>
+              <Link to="/shop" style={styles.catLink}>Voir Tout →</Link>
             </div>
             <img src={TableImg} alt="Table" style={styles.catImage} />
           </div>
@@ -118,17 +139,17 @@ function Home() {
               <h3>Luminaires</h3>
               <p>Lustres</p>
               <p>Lampes suspendues</p>
-              <Link to="/shop">Voir Tout →</Link>
+              <Link to="/shop" style={styles.catLink}>Voir Tout →</Link>
             </div>
             <img src={LightImg} alt="Light" style={styles.catImageSmall} />
           </div>
         </div>
         
-        <div style={{...styles.catCol, justifyContent: 'space-between'}}>
-          <div style={{...styles.catCard, flex: 2, background: '#f4f6f8', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '24px'}}>
+        <div style={styles.catCol}>
+          <div style={{...styles.catCard, flex: 2, background: '#f4f6f8', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
             <h3 style={{marginBottom: '10px'}}>Chaises</h3>
-            <img src={ChairImg} alt="Chair" style={{width: '60%', objectFit: 'contain'}} />
-            <Link to="/shop" style={{marginTop: '15px'}}>Voir Tout →</Link>
+            <img src={ChairImg} alt="Chair" style={{height: '200px', objectFit: 'contain', margin: '20px 0'}} />
+            <Link to="/shop" style={styles.catLink}>Voir Tout →</Link>
           </div>
           <div style={{...styles.catCard, flex: 1, background: 'var(--primary)', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
              <div style={{background: 'var(--accent)', padding: '5px 15px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', marginBottom: '10px'}}>PROMOTION</div>
@@ -188,53 +209,100 @@ const styles = {
     gap: '80px'
   },
   hero: {
-    background: 'var(--primary)',
+    background: '#163a4a', // Dark blue background
     borderRadius: '24px',
-    minHeight: '400px',
+    minHeight: '450px',
     display: 'flex',
     alignItems: 'center',
     position: 'relative',
     overflow: 'hidden',
-    padding: '40px 60px'
   },
   heroContent: {
     flex: 1,
     zIndex: 2,
-    color: 'white'
+    color: 'white',
+    padding: '60px 40px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    maxWidth: '60%'
   },
-  heroTitle: {
-    fontSize: '48px',
-    lineHeight: '1.2',
-    fontWeight: '700',
+  heroTag: {
+    background: 'rgba(255,255,255,0.1)',
+    color: '#aed1d6',
+    padding: '6px 16px',
+    borderRadius: '20px',
+    fontSize: '11px',
+    fontWeight: '600',
+    letterSpacing: '1px',
+    width: 'fit-content',
     marginBottom: '20px'
   },
+  heroTitle: {
+    fontSize: '44px',
+    lineHeight: '1.2',
+    fontWeight: '700',
+    marginBottom: '20px',
+    color: '#fff'
+  },
   heroSub: {
-    color: '#e0e0e0',
-    fontSize: '16px',
-    maxWidth: '400px',
-    lineHeight: '1.5'
+    color: '#aed1d6',
+    fontSize: '15px',
+    maxWidth: '450px',
+    lineHeight: '1.6',
+    marginBottom: '30px'
+  },
+  heroActions: {
+    display: 'flex',
+    gap: '15px',
+    marginBottom: '40px'
+  },
+  shopNowBtn: {
+    background: '#eab308', // Yellow/orange button
+    color: '#163a4a',
+    padding: '12px 24px',
+    borderRadius: '30px',
+    fontWeight: '700',
+    textDecoration: 'none',
+    fontSize: '14px'
+  },
+  instaBtn: {
+    background: '#f87171', // Reddish button
+    color: '#fff',
+    padding: '12px 24px',
+    borderRadius: '30px',
+    fontWeight: '700',
+    textDecoration: 'none',
+    fontSize: '14px'
+  },
+  heroStats: {
+    display: 'flex',
+    gap: '40px'
+  },
+  statNumber: {
+    fontSize: '20px',
+    fontWeight: '700',
+    color: '#fff',
+    marginBottom: '4px'
+  },
+  statLabel: {
+    fontSize: '12px',
+    color: '#aed1d6'
+  },
+  heroImageContainer: {
+    position: 'absolute',
+    right: '-5%',
+    top: 0,
+    bottom: 0,
+    width: '60%',
+    zIndex: 1,
+    display: 'flex',
+    alignItems: 'center'
   },
   heroImage: {
-    position: 'absolute',
-    right: '20px',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    width: '55%',
-    objectFit: 'cover',
-    zIndex: 1,
-    borderRadius: '16px',
-    boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
-  },
-  heroCutout: {
-    position: 'absolute',
-    bottom: '-50px',
-    right: '20%',
-    width: '200px',
-    height: '100px',
-    background: 'var(--bg-color)',
-    borderTopLeftRadius: '100px',
-    borderTopRightRadius: '100px',
-    zIndex: 3
+    width: '100%',
+    height: '110%',
+    objectFit: 'cover'
   },
   features: {
     display: 'flex',
@@ -321,13 +389,12 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gap: '24px',
-    minHeight: '600px'
+    minHeight: '500px'
   },
   catCol: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
-    height: '100%'
+    gap: '24px'
   },
   catCard: {
     background: 'white',
@@ -355,6 +422,13 @@ const styles = {
     width: '40%',
     objectFit: 'contain',
     zIndex: 1
+  },
+  catLink: {
+    marginTop: '10px',
+    fontSize: '14px',
+    fontWeight: '600',
+    color: 'var(--primary)',
+    textDecoration: 'none'
   },
   bestSelling: {
     display: 'flex',

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getProducts } from '../api';
 import { Search, ShoppingCart, User, Settings, LogOut } from 'lucide-react';
@@ -7,8 +7,8 @@ import { Search, ShoppingCart, User, Settings, LogOut } from 'lucide-react';
 function Navbar() {
   const { user, cart, logoutUser } = useApp();
   const navigate = useNavigate();
+  const location = useLocation();
   
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const searchRef = useRef(null);
@@ -16,7 +16,7 @@ function Navbar() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setIsSearchOpen(false);
+        setSearchResults([]);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -45,6 +45,16 @@ function Navbar() {
     navigate('/');
   };
 
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
+  const linkStyle = (path) => ({
+    ...styles.link,
+    fontWeight: isActive(path) ? '700' : '400',
+    color: isActive(path) ? 'var(--primary)' : 'var(--text-dark)'
+  });
+
   return (
     <nav style={styles.nav}>
       {/* Left: Logo */}
@@ -54,58 +64,56 @@ function Navbar() {
 
       {/* Middle: Links */}
       <div style={styles.links}>
-        <Link to="/" style={{...styles.link, fontWeight: '600'}}>Accueil</Link>
-        <Link to="/shop" style={styles.link}>Boutique</Link>
-        <Link to="/products" style={styles.link}>Produits</Link>
-        <Link to="/about" style={styles.link}>À propos</Link>
-        <Link to="/contact" style={styles.link}>Contact</Link>
-        <Link to="/blog" style={styles.link}>Blog</Link>
+        <Link to="/" style={linkStyle('/')}>Accueil</Link>
+        <Link to="/shop" style={linkStyle('/shop')}>Boutique</Link>
+        <Link to="/about" style={linkStyle('/about')}>À propos</Link>
+        <Link to="/contact" style={linkStyle('/contact')}>Contact</Link>
+        <Link to="/blog" style={linkStyle('/blog')}>Blog</Link>
       </div>
 
       {/* Right: Icons & User Actions */}
       <div style={styles.iconsContainer}>
         <div style={styles.searchWrapper} ref={searchRef}>
-          <Search size={20} style={styles.icon} onClick={() => setIsSearchOpen(!isSearchOpen)} />
-          {isSearchOpen && (
+          <div style={styles.searchBar}>
+            <Search size={16} style={{ color: '#888' }} />
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={styles.searchInput}
+            />
+          </div>
+          {searchResults.length > 0 && (
             <div style={styles.searchDropdown}>
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={styles.searchInput}
-                autoFocus
-              />
-              {searchResults.length > 0 && (
-                <div style={styles.resultsList}>
-                  {searchResults.map(prod => (
-                    <Link key={prod.id} to={`/products/${prod.id}`} style={styles.resultItem} onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}>
-                      <img src={prod.image_url} alt={prod.name} style={styles.resultImg} />
-                      <div style={styles.resultInfo}>
-                        <div style={styles.resultName}>{prod.name}</div>
-                        <div style={styles.resultPrice}>{parseFloat(prod.price).toFixed(2)} €</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
+              <div style={styles.resultsList}>
+                {searchResults.map(prod => (
+                  <Link key={prod.id} to={`/products/${prod.id}`} style={styles.resultItem} onClick={() => { setSearchResults([]); setSearchQuery(''); }}>
+                    <img src={prod.image_url} alt={prod.name} style={styles.resultImg} />
+                    <div style={styles.resultInfo}>
+                      <div style={styles.resultName}>{prod.name}</div>
+                      <div style={styles.resultPrice}>{parseFloat(prod.price).toFixed(2)} €</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
         </div>
-        
+
         {user ? (
           <>
             <Link to="/cart" style={styles.iconWrapper}>
               <ShoppingCart size={20} style={styles.icon} />
               {cart.length > 0 && <span style={styles.badge}>{cart.length}</span>}
             </Link>
-            
+
             {user.role === 'admin' && (
-              <Link to="/admin" style={styles.iconWrapper} title="Admin">
-                <Settings size={20} style={{...styles.icon, color: '#f09653'}} />
-              </Link>
+               <Link to="/admin" style={styles.iconWrapper} title="Admin">
+                 <Settings size={20} style={{ ...styles.icon, color: '#f09653' }} />
+               </Link>
             )}
-            
+
             <div style={styles.userInfo}>
               <User size={20} style={styles.icon} />
               <span style={styles.username}>{user.name}</span>
@@ -117,7 +125,7 @@ function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/login" style={{...styles.link, fontSize: '14px', fontWeight: '500'}}>Se connecter</Link>
+            <Link to="/login" style={{ ...styles.link, fontSize: '14px', fontWeight: '500' }}>Se connecter</Link>
             <Link to="/register" className="btn-primary" style={{ fontSize: '13px', padding: '8px 16px' }}>S'inscrire</Link>
           </>
         )}
@@ -149,18 +157,17 @@ const styles = {
     fontSize: '24px',
     fontWeight: '700',
     color: 'var(--text-dark)',
-    letterSpacing: '-0.5px'
+    letterSpacing: '-0.5px',
+    textDecoration: 'none'
   },
   links: {
-    display: 'flex',
+    display: window.innerWidth < 768 ? 'none' : 'flex',
     gap: '30px',
-    display: window.innerWidth < 768 ? 'none' : 'flex' // Simple responsive hide
   },
   link: {
-    color: 'var(--text-dark)',
     fontSize: '15px',
-    fontWeight: '400',
-    transition: 'color 0.2s'
+    transition: 'color 0.2s',
+    textDecoration: 'none'
   },
   iconsContainer: {
     display: 'flex',
@@ -177,6 +184,22 @@ const styles = {
     display: 'flex',
     alignItems: 'center'
   },
+  searchBar: {
+    display: 'flex',
+    alignItems: 'center',
+    background: '#f8f9fa',
+    borderRadius: '20px',
+    padding: '6px 12px',
+    border: '1px solid #eee'
+  },
+  searchInput: {
+    border: 'none',
+    background: 'transparent',
+    outline: 'none',
+    paddingLeft: '8px',
+    fontSize: '14px',
+    width: '180px'
+  },
   searchDropdown: {
     position: 'absolute',
     top: '40px',
@@ -188,17 +211,7 @@ const styles = {
     width: '300px',
     zIndex: 1000
   },
-  searchInput: {
-    width: '100%',
-    padding: '10px 15px',
-    borderRadius: '8px',
-    border: '1px solid #eee',
-    outline: 'none',
-    fontSize: '14px',
-    background: '#f8f9fa'
-  },
   resultsList: {
-    marginTop: '10px',
     display: 'flex',
     flexDirection: 'column',
     gap: '5px'
@@ -265,7 +278,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     padding: '5px',
-    marginLeft: '10px'
+    marginLeft: '10px',
+    cursor: 'pointer'
   }
 };
 
