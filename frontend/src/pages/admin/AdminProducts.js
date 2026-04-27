@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getProducts, createProduct, updateProduct, deleteProduct, getCategories, uploadImage } from '../../api';
+import { getProducts, createProduct, updateProduct, deleteProduct, getCategories } from '../../api';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -65,20 +65,7 @@ const AdminProducts = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    const uploadData = new FormData();
-    uploadData.append('image', file);
-    
-    try {
-      const res = await uploadImage(uploadData);
-      setFormData({ ...formData, image_url: res.data.imageUrl });
-    } catch (error) {
-      alert("Erreur lors de l'upload de l'image");
-    }
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -159,15 +146,12 @@ const AdminProducts = () => {
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <label style={{ fontSize: '14px', color: '#7f8c8d' }}>Image du produit</label>
-                <input type="file" accept="image/*" onChange={handleImageUpload} />
-                {formData.image_url && (
-                  <div style={{ marginTop: '10px' }}>
-                    <img src={formData.image_url} alt="Aperçu" style={{ width: '100px', borderRadius: '4px', objectFit: 'cover' }} />
-                  </div>
-                )}
-              </div>
+              <input type="text" name="image_url" placeholder="URL de l'image" value={formData.image_url} onChange={handleChange} required />
+              {formData.image_url && (
+                <div style={{ marginTop: '10px' }}>
+                  <img src={formData.image_url} alt="Aperçu" style={{ width: '100px', borderRadius: '4px', objectFit: 'cover' }} />
+                </div>
+              )}
               <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} required />
               
               <div className="modal-actions">
