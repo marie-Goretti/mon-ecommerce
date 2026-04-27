@@ -53,10 +53,10 @@ function Home() {
     <div style={styles.container}>
       
       {/* Hero Section */}
-      <div style={{ ...styles.hero, backgroundImage: `url(${HeroSofa})` }}>
-        <div style={styles.heroContent}>
+      <div style={{ ...styles.hero, backgroundImage: `url(${HeroSofa})` }} className="mobile-hero-bg">
+        <div style={styles.heroContent} className="mobile-hero-content">
           <div style={styles.heroTag}>IDÉES DE DESIGN DE MEUBLES</div>
-          <h1 style={styles.heroTitle}>Découvrez Votre<br/>Espace Idéal</h1>
+          <h1 style={styles.heroTitle} className="mobile-hero-title">Découvrez Votre<br/>Espace Idéal</h1>
           <p style={styles.heroSub}>Choisir les bons meubles pour votre maison ajoutera élégance et fonctionnalité à votre intérieur, tout en reflétant votre style unique.</p>
           
           <div style={styles.heroActions}>
@@ -64,7 +64,7 @@ function Home() {
             <a href="#instagram" style={styles.instaBtn}>Suivre Instagram</a>
           </div>
 
-          <div style={styles.heroStats}>
+          <div style={styles.heroStats} className="mobile-wrap mobile-gap-20">
             <div>
               <div style={styles.statNumber}>2500+</div>
               <div style={styles.statLabel}>Styles Uniques</div>
@@ -102,7 +102,7 @@ function Home() {
       </div>
 
       {/* Ideas & Inspiration Section */}
-      <div style={styles.ideasSection}>
+      <div style={styles.ideasSection} className="mobile-col">
         <div style={styles.ideasImageContainer}>
           <img src={FurnitureIdea} alt="Furniture Ideas" style={styles.ideasImage} />
         </div>
@@ -120,7 +120,7 @@ function Home() {
       </div>
 
       {/* Categories Layout */}
-      <div style={styles.categoriesLayout}>
+      <div style={styles.categoriesLayout} className="mobile-grid-1">
         <div style={styles.catCol}>
           <div style={styles.catCard}>
             <div style={styles.catText}>

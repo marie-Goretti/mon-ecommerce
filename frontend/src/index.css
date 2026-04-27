@@ -227,3 +227,106 @@ a {
   font-weight: bold;
   color: #2c3e50;
 }
+
+/* =========================================
+   RESPONSIVE UTILITY CLASSES (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+  /* Layout Modifiers */
+  .mobile-col {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .mobile-grid-1 {
+    grid-template-columns: 1fr !important;
+  }
+  .mobile-hide {
+    display: none !important;
+  }
+  .mobile-show {
+    display: block !important;
+  }
+  .mobile-show-flex {
+    display: flex !important;
+  }
+  
+  /* Sizing and Spacing */
+  .mobile-w-100 {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .mobile-p-20 {
+    padding: 20px !important;
+  }
+  .mobile-text-center {
+    text-align: center !important;
+  }
+  .mobile-wrap {
+    flex-wrap: wrap !important;
+  }
+  .mobile-gap-10 {
+    gap: 10px !important;
+  }
+  .mobile-gap-20 {
+    gap: 20px !important;
+  }
+
+  /* Specific Component Overrides */
+  .mobile-hero-bg {
+    background-position: center !important;
+    min-height: 350px !important;
+  }
+  .mobile-hero-content {
+    max-width: 100% !important;
+    padding: 20px !important;
+  }
+  .mobile-hero-title {
+    font-size: 28px !important;
+  }
+
+  /* Navbar Specific */
+  .hamburger-btn {
+    display: block !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-dark);
+  }
+  .mobile-nav-menu {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+    z-index: 99;
+    border-top: 1px solid #eee;
+  }
+  .mobile-nav-links {
+    display: flex !important;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .mobile-nav-icons {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .mobile-search-wrapper {
+    order: 3;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .mobile-search-bar {
+    width: 100% !important;
+  }
+  .mobile-search-input {
+    width: 100% !important;
+  }
+}
+
+/* Hide hamburger by default on desktop */
+.hamburger-btn {
+  display: none;
+}

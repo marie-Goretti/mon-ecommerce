@@ -41,12 +41,12 @@ function Cart() {
       {cart.length === 0 ? (
         <p style={styles.empty}>Votre panier est vide</p>
       ) : (
-        <div style={styles.layout}>
+        <div style={styles.layout} className="mobile-col">
           {/* Left Column: Cart Items */}
           <div style={styles.itemsColumn}>
             <div style={styles.itemsList}>
               {cart.map(item => (
-                <div key={item.id} style={styles.itemRow}>
+                <div key={item.id} style={styles.itemRow} className="mobile-wrap">
                   <button onClick={() => handleRemove(item.id)} style={styles.removeBtn}>
                     <X size={18} color="#888" />
                   </button>
@@ -79,7 +79,7 @@ function Cart() {
             {/* Coupon Section */}
             <div style={styles.couponSection}>
               <p style={styles.couponText}>Vous avez un code promo ? Entrez-le ci-dessous.</p>
-              <div style={styles.couponInputWrapper}>
+              <div style={styles.couponInputWrapper} className="mobile-wrap">
                 <input type="text" placeholder="Code promo" style={styles.couponInput} />
                 <button style={styles.applyBtn}>APPLIQUER</button>
               </div>
@@ -87,7 +87,7 @@ function Cart() {
           </div>
 
           {/* Right Column: Cart Totals */}
-          <div style={styles.totalsColumn}>
+          <div style={styles.totalsColumn} className="mobile-w-100">
             <div style={styles.totalsBox}>
               <h2 style={styles.totalsTitle}>TOTAUX DU PANIER</h2>
               

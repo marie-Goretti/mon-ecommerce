@@ -67,9 +67,9 @@ function ProductDetail() {
         Boutique / {product.category || 'Catégorie'} / <strong>{product.name}</strong>
       </div>
       
-      <div style={styles.content}>
+      <div style={styles.content} className="mobile-col">
         {/* Left side: Images */}
-        <div style={styles.gallery}>
+        <div style={styles.gallery} className="mobile-w-100">
           <div style={styles.mainImageContainer}>
             <img src={product.image_url} alt={product.name} style={styles.mainImage} />
           </div>
@@ -100,7 +100,7 @@ function ProductDetail() {
 
 
 
-          <div style={styles.actionRow}>
+          <div style={styles.actionRow} className="mobile-wrap">
             <div style={styles.quantitySelector}>
               <button onClick={() => handleQuantity(-1)} style={styles.qtyBtn}>-</button>
               <span style={styles.qtyValue}>{quantity}</span>
@@ -114,7 +114,7 @@ function ProductDetail() {
 
           {message && <p style={styles.message}>{message}</p>}
 
-          <div style={styles.buttons}>
+          <div style={styles.buttons} className="mobile-wrap">
             <button style={styles.buyNowBtn}>Acheter Maintenant</button>
             <button onClick={handleAddToCart} style={styles.addToCartBtn}>Ajouter au Panier</button>
           </div>

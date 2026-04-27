@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getProducts } from '../api';
-import { Search, ShoppingCart, User, Settings, LogOut } from 'lucide-react';
+import { Search, ShoppingCart, User, Settings, LogOut, Menu, X } from 'lucide-react';
 
 function Navbar() {
   const { user, cart, logoutUser } = useApp();
@@ -11,6 +11,7 @@ function Navbar() {
   
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchRef = useRef(null);
 
   useEffect(() => {
@@ -62,19 +63,23 @@ function Navbar() {
         <Link to="/" style={styles.logo}>Athena.</Link>
       </div>
 
+      <button className="hamburger-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
       {/* Middle: Links */}
-      <div style={styles.links}>
-        <Link to="/" style={linkStyle('/')}>Accueil</Link>
-        <Link to="/shop" style={linkStyle('/shop')}>Boutique</Link>
-        <Link to="/about" style={linkStyle('/about')}>À propos</Link>
-        <Link to="/contact" style={linkStyle('/contact')}>Contact</Link>
-        <Link to="/blog" style={linkStyle('/blog')}>Blog</Link>
+      <div style={styles.links} className={`mobile-nav-links ${isMobileMenuOpen ? 'mobile-nav-menu' : 'mobile-hide'}`}>
+        <Link to="/" style={linkStyle('/')} onClick={() => setIsMobileMenuOpen(false)}>Accueil</Link>
+        <Link to="/shop" style={linkStyle('/shop')} onClick={() => setIsMobileMenuOpen(false)}>Boutique</Link>
+        <Link to="/about" style={linkStyle('/about')} onClick={() => setIsMobileMenuOpen(false)}>À propos</Link>
+        <Link to="/contact" style={linkStyle('/contact')} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+        <Link to="/blog" style={linkStyle('/blog')} onClick={() => setIsMobileMenuOpen(false)}>Blog</Link>
       </div>
 
       {/* Right: Icons & User Actions */}
-      <div style={styles.iconsContainer}>
-        <div style={styles.searchWrapper} ref={searchRef}>
-          <div style={styles.searchBar}>
+      <div style={styles.iconsContainer} className="mobile-nav-icons">
+        <div style={styles.searchWrapper} className="mobile-search-wrapper" ref={searchRef}>
+          <div style={styles.searchBar} className="mobile-search-bar">
             <Search size={16} style={{ color: '#888' }} />
             <input
               type="text"
@@ -82,6 +87,7 @@ function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={styles.searchInput}
+              className="mobile-search-input"
             />
           </div>
           {searchResults.length > 0 && (
@@ -161,7 +167,7 @@ const styles = {
     textDecoration: 'none'
   },
   links: {
-    display: window.innerWidth < 768 ? 'none' : 'flex',
+    display: 'flex',
     gap: '30px',
   },
   link: {
