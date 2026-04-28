@@ -58,6 +58,10 @@ function Cart() {
                     <span>{parseFloat(item.price).toFixed(0)} FCFA</span>
                   </div>
                   
+                  <div style={{...styles.priceOption, minWidth: '80px', color: '#666', fontSize: '13px'}}>
+                    Qté: {item.quantity}
+                  </div>
+                  
                   <div style={styles.itemTotal}>
                     <div style={styles.totalPrice}>{(parseFloat(item.price) * item.quantity).toFixed(0)} FCFA</div>
                   </div>

@@ -57,6 +57,23 @@ function Orders() {
               <div style={styles.body}>
                 <p><strong>Date :</strong> {new Date(order.created_at).toLocaleDateString()}</p>
                 <p><strong>Total :</strong> <span style={styles.price}>{parseFloat(order.total_amount).toFixed(0)} FCFA</span></p>
+                
+                {order.items && order.items.length > 0 && (
+                  <div style={{ marginTop: '15px', borderTop: '1px solid #eee', paddingTop: '15px' }}>
+                    <p style={{ fontWeight: '600', marginBottom: '10px', fontSize: '14px', color: '#111' }}>Articles :</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {order.items.map((item, idx) => (
+                        <div key={item.id || idx} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                          <img src={item.image_url} alt={item.name} style={{ width: '50px', height: '50px', objectFit: 'contain', background: '#f8f9fa', borderRadius: '4px' }} />
+                          <div style={{ flex: 1 }}>
+                            <p style={{ margin: 0, fontWeight: '500', color: '#111', fontSize: '14px' }}>{item.name}</p>
+                            <p style={{ margin: '4px 0 0', color: '#666', fontSize: '12px' }}>Qté: {item.quantity} × {parseFloat(item.price_at_purchase).toFixed(0)} FCFA</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}

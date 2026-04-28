@@ -18,6 +18,7 @@ import AdminCategories from './pages/admin/AdminCategories';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminOrders from './pages/admin/AdminOrders';
 import Orders from './pages/Orders';
+import Profile from './pages/Profile';
 
 import { Outlet } from 'react-router-dom';
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/products" element={<Shop />} />
         <Route path="/about" element={<About />} />

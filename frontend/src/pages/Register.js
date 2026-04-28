@@ -68,14 +68,14 @@ function Register() {
 }
 
 const styles = {
-  container: { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' },
-  card: { background: 'white', padding: '40px', borderRadius: '16px', width: '100%', maxWidth: '400px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' },
-  title: { textAlign: 'center', marginBottom: '24px', color: '#1a1a2e', fontSize: '24px' },
-  error: { background: '#fee', color: '#e94560', padding: '10px', borderRadius: '8px', marginBottom: '16px', textAlign: 'center' },
-  input: { width: '100%', padding: '12px 16px', marginBottom: '14px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '15px', outline: 'none', display: 'block' },
-  btn: { width: '100%', padding: '13px', background: '#e94560', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold' },
-  switch: { textAlign: 'center', marginTop: '20px', color: '#888', fontSize: '14px' },
-  linkText: { color: '#e94560', fontWeight: 'bold' }
+  container: { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh', fontFamily: 'Inter, sans-serif' },
+  card: { background: 'white', padding: '40px', borderRadius: '4px', width: '100%', maxWidth: '400px', border: '1px solid #eee' },
+  title: { textAlign: 'center', marginBottom: '30px', color: '#111', fontSize: '24px', fontWeight: '300', letterSpacing: '1px', textTransform: 'uppercase' },
+  error: { background: '#fff0f0', color: '#d32f2f', padding: '12px', borderRadius: '4px', marginBottom: '20px', textAlign: 'center', fontSize: '13px' },
+  input: { width: '100%', padding: '14px 16px', marginBottom: '16px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px', outline: 'none', display: 'block', boxSizing: 'border-box' },
+  btn: { width: '100%', padding: '16px', background: '#111', color: 'white', border: 'none', borderRadius: '4px', fontSize: '14px', fontWeight: '600', letterSpacing: '1px', cursor: 'pointer', transition: 'background 0.2s' },
+  switch: { textAlign: 'center', marginTop: '24px', color: '#666', fontSize: '13px' },
+  linkText: { color: '#111', fontWeight: '600', textDecoration: 'underline' }
 };
 
 export default Register;

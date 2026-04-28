@@ -2,6 +2,17 @@ import { useState, useEffect } from 'react';
 import { getProducts, getCategories, getUsers, getAllOrders } from '../../api';
 import { ArrowUpRight, Plus, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+
+const chartData = [
+  { name: 'Lun', ventes: 4000 },
+  { name: 'Mar', ventes: 3000 },
+  { name: 'Mer', ventes: 2000 },
+  { name: 'Jeu', ventes: 2780 },
+  { name: 'Ven', ventes: 1890 },
+  { name: 'Sam', ventes: 2390 },
+  { name: 'Dim', ventes: 3490 },
+];
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -96,14 +107,15 @@ const AdminDashboard = () => {
       <div className="dashboard-middle-grid">
         <div className="analytics-section">
           <h3>Analyse des Ventes</h3>
-          <div className="css-bar-chart">
-            <div className="bar-wrapper"><div className="bar val-40"></div><span>L</span></div>
-            <div className="bar-wrapper"><div className="bar val-70"></div><span>M</span></div>
-            <div className="bar-wrapper"><div className="bar val-100 highlight"></div><span>M</span></div>
-            <div className="bar-wrapper"><div className="bar val-50"></div><span>J</span></div>
-            <div className="bar-wrapper"><div className="bar val-80"></div><span>V</span></div>
-            <div className="bar-wrapper"><div className="bar val-30"></div><span>S</span></div>
-            <div className="bar-wrapper"><div className="bar val-60"></div><span>D</span></div>
+          <div style={{ width: '100%', height: 250, marginTop: '20px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#888' }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#888' }} />
+                <Tooltip cursor={{ fill: '#f8f9fa' }} contentStyle={{ borderRadius: '8px', border: '1px solid #eee', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }} />
+                <Bar dataKey="ventes" fill="#111" radius={[4, 4, 0, 0]} barSize={30} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
@@ -111,13 +123,18 @@ const AdminDashboard = () => {
           <h3>Rappels</h3>
           <div className="reminders-list" style={{ maxHeight: '300px', overflowY: 'auto' }}>
             {pendingOrders.length > 0 ? (
-              pendingOrders.map(order => (
-                <div key={order.id} className="reminder-card" style={{ marginBottom: '10px' }}>
-                  <h4>Préparer Commande #{order.id}</h4>
-                  <p>Date : {new Date(order.created_at).toLocaleDateString()}</p>
-                  <button className="btn-meeting" onClick={() => navigate('/admin/orders')}><Play size={16} /> Gérer la commande</button>
-                </div>
-              ))
+              <>
+                {pendingOrders.slice(0, 2).map(order => (
+                  <div key={order.id} className="reminder-card" style={{ marginBottom: '10px' }}>
+                    <h4>Préparer Commande #{order.id}</h4>
+                    <p>Date : {new Date(order.created_at).toLocaleDateString()}</p>
+                  </div>
+                ))}
+                {pendingOrders.length > 2 && <p style={{ fontSize: '13px', color: '#666', textAlign: 'center', marginBottom: '10px' }}>+ {pendingOrders.length - 2} autres commandes en attente</p>}
+                <button className="btn-meeting" onClick={() => navigate('/admin/orders')} style={{ width: '100%', marginTop: '10px' }}>
+                  <Play size={16} /> Gérer les commandes
+                </button>
+              </>
             ) : (
               <p style={{ color: '#888', fontSize: '14px', marginTop: '15px' }}>Aucune commande en attente.</p>
             )}

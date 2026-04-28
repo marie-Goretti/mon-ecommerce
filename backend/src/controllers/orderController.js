@@ -58,11 +58,30 @@ const getUserOrders = async (req, res) => {
   try {
     const userId = req.user.id;
     const result = await pool.query(`
-      SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC
+      SELECT o.*,
+             COALESCE(
+               json_agg(
+                 json_build_object(
+                   'id', oi.id,
+                   'product_id', oi.product_id,
+                   'quantity', oi.quantity,
+                   'price_at_purchase', oi.price_at_purchase,
+                   'name', p.name,
+                   'image_url', p.image_url
+                 )
+               ) FILTER (WHERE oi.id IS NOT NULL), '[]'
+             ) as items
+      FROM orders o
+      LEFT JOIN order_items oi ON o.id = oi.order_id
+      LEFT JOIN products p ON oi.product_id = p.id
+      WHERE o.user_id = $1
+      GROUP BY o.id
+      ORDER BY o.created_at DESC
     `, [userId]);
     
     res.json(result.rows);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Erreur serveur' });
   }
 };

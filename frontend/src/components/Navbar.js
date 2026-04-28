@@ -123,10 +123,10 @@ function Navbar() {
                </Link>
             )}
 
-            <div style={styles.userInfo}>
+            <Link to="/profile" style={{...styles.userInfo, textDecoration: 'none', color: 'inherit'}}>
               <User size={20} style={styles.icon} />
               <span style={styles.username}>{user.name}</span>
-            </div>
+            </Link>
 
             <button onClick={handleLogout} style={styles.logoutBtn} title="Logout">
               <LogOut size={20} />

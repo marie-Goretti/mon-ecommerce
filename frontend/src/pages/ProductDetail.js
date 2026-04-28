@@ -58,6 +58,22 @@ function ProductDetail() {
     }
   };
 
+  const handleBuyNow = async () => {
+    if (!user) return navigate('/login');
+    if (product.stock < quantity) {
+      setMessage('❌ Stock insuffisant');
+      return;
+    }
+    try {
+      await addToCart({ product_id: product.id, quantity });
+      await fetchCart();
+      navigate('/checkout');
+    } catch (err) {
+      setMessage('❌ ' + (err.response?.data?.error || 'Erreur'));
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
   if (loading) return <p style={styles.loading}>Chargement...</p>;
   if (!product) return <p style={styles.loading}>Produit non trouvé</p>;
 
@@ -115,7 +131,7 @@ function ProductDetail() {
           {message && <p style={styles.message}>{message}</p>}
 
           <div style={styles.buttons} className="mobile-wrap">
-            <button style={styles.buyNowBtn}>Acheter Maintenant</button>
+            <button onClick={handleBuyNow} style={styles.buyNowBtn}>Acheter Maintenant</button>
             <button onClick={handleAddToCart} style={styles.addToCartBtn}>Ajouter au Panier</button>
           </div>
 
