@@ -4,6 +4,8 @@ import { ArrowUpRight, Plus, Play } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({ products: 0, categories: 0, users: 0, orders: 12 });
+  const [latestUsers, setLatestUsers] = useState([]); 
+
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -19,6 +21,7 @@ const AdminDashboard = () => {
           users: userRes.data.length,
           orders: 12
         });
+        setLatestUsers(userRes.data.slice(0, 5)); 
       } catch (error) {
         console.error("Erreur lors du chargement des statistiques", error);
       }
@@ -126,22 +129,23 @@ const AdminDashboard = () => {
             <button className="btn-add-member">+ Ajouter Membre</button>
           </div>
           <div className="team-list">
-            <div className="team-member">
-              <div className="member-avatar">J</div>
-              <div className="member-info">
-                <h4>Jean Dupont</h4>
-                <p>Client régulier</p>
+            {latestUsers.map((u, index) => (
+              <div className="team-member" key={u.id}>
+                <div 
+                  className="member-avatar" 
+                  style={{ background: index % 2 === 0 ? '#163a4a' : '#f09653' }}
+                >
+                  {u.name?.charAt(0).toUpperCase()}
+                </div>
+                <div className="member-info">
+                  <h4>{u.name}</h4>
+                  <p>{u.email}</p>
+                </div>
+                <span className={`status-badge ${u.role === 'admin' ? 'status-progress' : 'status-completed'}`}>
+                  {u.role === 'admin' ? 'Admin' : 'Vérifié'}
+                </span>
               </div>
-              <span className="status-badge status-completed">Vérifié</span>
-            </div>
-            <div className="team-member">
-              <div className="member-avatar" style={{ background: '#f09653' }}>M</div>
-              <div className="member-info">
-                <h4>Marie Curie</h4>
-                <p>Nouveau client</p>
-              </div>
-              <span className="status-badge status-progress">En cours</span>
-            </div>
+            ))}
           </div>
         </div>
       </div>
