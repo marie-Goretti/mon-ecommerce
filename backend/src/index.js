@@ -4,6 +4,11 @@ const path = require('path');
 require('dotenv').config();
 require('./config/db');
 
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
+
+
 const app = express();
 
 app.use(cors());
@@ -31,8 +36,5 @@ app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
 });
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./config/swagger');
-
-// Après tes middlewares existants
+// Documentation Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
