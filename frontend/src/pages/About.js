@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2, Play, Sofa, Palette, Lightbulb } from 'lucide-react';
 
-/* ─── couleurs du site ────────────────────────────────────────────
+//images
+import Couple from '../assets/couple.png';
+import Living_room from '../assets/living_room.png';
+
+
+/* ─── couleurs du site ───────────────────────────────────────────
    primary   : #163a4a  (bleu-vert profond)
    accent    : #eab308  (jaune doré)
    warm      : #f87171  (terracotta doux)
@@ -95,41 +100,26 @@ const STYLES = `
   }
   .ab-btn-primary:hover { background: #0f2a36; transform: translateY(-1px); }
 
-  /* vidéo placeholder */
-  .ab-video-wrap {
-    position: relative; border-radius: 20px; overflow: hidden;
-    background: #163a4a; aspect-ratio: 4/3;
-    display: flex; align-items: center; justify-content: center;
+  /* ─── image section 1 ─── */
+  .ab-img-wrap {
+    position: relative; border-radius: 20px; overflow: visible;
+    aspect-ratio: 4/3;
   }
-  .ab-video-bg {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, #163a4a 0%, #0f2a36 50%, #1a4560 100%);
-    opacity: .9;
+  .ab-img-wrap img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block; border-radius: 20px;
   }
-  .ab-video-pattern {
-    position: absolute; inset: 0; opacity: .06;
-    background-image: repeating-linear-gradient(
-      45deg, #fff 0, #fff 1px, transparent 0, transparent 50%
-    );
-    background-size: 20px 20px;
+  .ab-img-deco {
+    position: absolute; top: -16px; right: -16px;
+    width: 100px; height: 100px;
+    border: 2px solid rgba(234,179,8,.4); border-radius: 50%;
+    pointer-events: none;
   }
-  .ab-play-btn {
-    position: relative; z-index: 2;
-    width: 70px; height: 70px; border-radius: 50%;
-    background: #eab308;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: transform .2s, box-shadow .2s;
-    border: none;
-    box-shadow: 0 0 0 16px rgba(234,179,8,.15);
-  }
-  .ab-play-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 0 24px rgba(234,179,8,.1);
-  }
-  .ab-video-label {
-    position: absolute; bottom: 24px; left: 24px;
-    z-index: 2; color: rgba(255,255,255,.7);
-    font-size: 13px; letter-spacing: .04em;
+  .ab-img-deco2 {
+    position: absolute; bottom: 20px; left: -20px;
+    width: 64px; height: 64px;
+    background: #eab308; border-radius: 50%; opacity: .15;
+    pointer-events: none;
   }
 
   /* ─── section 2 : valeurs ─── */
@@ -303,26 +293,11 @@ export default function About() {
             </a>
           </div>
 
-          {/* vidéo placeholder */}
-          <div className="ab-video-wrap">
-            <div className="ab-video-bg" />
-            <div className="ab-video-pattern" />
-            {!videoPlaying ? (
-              <>
-                <button
-                  className="ab-play-btn"
-                  onClick={() => setVideoPlaying(true)}
-                  aria-label="Lancer la vidéo"
-                >
-                  <Play size={28} fill="#163a4a" color="#163a4a" />
-                </button>
-                <span className="ab-video-label">Notre univers en images</span>
-              </>
-            ) : (
-              <p style={{ color: 'rgba(255,255,255,.6)', fontSize: 14, position: 'relative', zIndex: 2 }}>
-                Intégrez ici votre vidéo (YouTube / Vimeo)
-              </p>
-            )}
+          {/* image placeholder */}
+          <div className="ab-img-wrap">
+            <img src={Couple} alt="Notre univers" />
+            <div className="ab-img-deco" />
+            <div className="ab-img-deco2" />
           </div>
         </div>
       </section>
@@ -459,7 +434,7 @@ export default function About() {
                 <div className="ab-vision-placeholder">
                   <Sofa size={64} />
                   <span style={{ fontSize: 13, fontFamily: 'DM Sans, sans-serif' }}>
-                    Votre photo ici
+                    <img src={Living_room} alt="Table" style={styles.catImage} />
                   </span>
                 </div>
               </div>
