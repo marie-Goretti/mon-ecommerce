@@ -61,7 +61,6 @@ function Home() {
           
           <div style={styles.heroActions}>
             <Link to="/shop" style={styles.shopNowBtn}>Acheter</Link>
-            <a href="#instagram" style={styles.instaBtn}>Suivre Instagram</a>
           </div>
 
           <div style={styles.heroStats} className="mobile-wrap mobile-gap-20">

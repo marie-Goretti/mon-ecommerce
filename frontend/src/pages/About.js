@@ -206,7 +206,6 @@ const STYLES = `
   .ab-vision-img {
     border-radius: 20px; overflow: hidden;
     aspect-ratio: 4/5; position: relative;
-    background: #fdf1e4;
     display: flex; align-items: center; justify-content: center;
   }
   .ab-vision-placeholder {
