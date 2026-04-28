@@ -21,7 +21,9 @@
 - [Utilisation avec Docker](#utilisation-avec-docker)
 - [Variables d'environnement](#variables-denvironnement)
 - [Tests et CI/CD](#tests-et-cicd)
+- [Documentation API](#documentation-api)
 - [Déploiement avec Terraform](#déploiement-avec-terraform)
+- [Monitoring](#monitoring)
 - [Contribuer](#contribuer)
 - [Licence](#licence)
 
@@ -34,7 +36,7 @@
 - Catalogue produits avec filtrage par catégories
 - Détail produit avec galerie d'images
 - Panier dynamique avec gestion du contexte React
-- Processus de checkout et paiement sécurisé
+- Processus de checkout et paiement sécurisé (intégré)
 - Authentification (Login/Register) avec JWT
 - Historique des commandes utilisateur
 - Interface d'administration (dossier `admin/`)
@@ -49,12 +51,14 @@
 - Upload d'images avec Multer
 - API RESTful avec CORS configuré
 - Connexion PostgreSQL avec pg
+- Middleware de gestion des erreurs et validation
 
 ### DevOps et Infrastructure
 - Conteneurisation complète avec Docker et docker-compose
-- Infrastructure as Code avec Terraform (AWS : VPC, EC2, ECR, Security Groups)
-- CI/CD automatisé avec GitHub Actions (tests, build, déploiement)
-- Gestion sécurisée des secrets via variables d'environnement
+- Dockerfile multi-stage optimisé pour la production
+- Infrastructure as Code avec Terraform (AWS : VPC, ECS, RDS, ECR, Security Groups)
+- CI/CD automatisé avec GitHub Actions (tests, linting, build, déploiement)
+- Gestion sécurisée des secrets via GitHub Secrets et variables d'environnement
 
 ---
 
@@ -66,7 +70,7 @@ mon-ecommerce/
 │   ├── src/
 │   │   ├── api/             # Services API (axios)
 │   │   ├── components/      # Composants réutilisables
-│   │   ├── context/         # Context React (auth, cart)
+│   │   ├── context/         # Context React (auth, cart, payment)
 │   │   ├── pages/           # Pages de l'application
 │   │   │   ├── admin/       # Interface administrateur
 │   │   │   ├── Home.js
@@ -74,18 +78,20 @@ mon-ecommerce/
 │   │   │   ├── ProductDetail.js
 │   │   │   ├── Cart.js
 │   │   │   ├── Checkout.js
+│   │   │   ├── Payment.js   # Intégration paiement
 │   │   │   ├── Orders.js
 │   │   │   ├── Login.js
 │   │   │   └── Register.js
 │   │   └── assets/          # Images, styles globaux
-│   ├── Dockerfile
-│   └── package.json
+│   ├── Dockerfile           # Multi-stage build
+│   ├── package.json
+│   └── jest.config.js       # Configuration des tests
 │
 ├── backend/                  # API Node.js/Express
 │   ├── src/
-│   │   ├── config/          # Configuration DB, JWT
+│   │   ├── config/          # Configuration DB, JWT, Swagger
 │   │   ├── controllers/     # Logique métier
-│   │   ├── middleware/      # Auth, upload, erreurs
+│   │   ├── middleware/      # Auth, upload, erreurs, validation
 │   │   ├── routes/          # Endpoints API
 │   │   │   ├── auth.js
 │   │   │   ├── products.js
@@ -93,27 +99,37 @@ mon-ecommerce/
 │   │   │   ├── orders.js
 │   │   │   ├── categories.js
 │   │   │   ├── users.js
-│   │   │   └── upload.js
-│   │   └── index.js         # Point d'entrée
-│   ├── Dockerfile
-│   └── package.json
+│   │   │   ├── upload.js
+│   │   │   └── payment.js   # Endpoint paiement
+│   │   ├── models/          # Modèles de données (Sequelize/Prisma)
+│   │   ├── services/        # Services métier (payment, email)
+│   │   └── index.js         # Point d'entrée + Swagger setup
+│   ├── Dockerfile           # Multi-stage build avec user non-root
+│   ├── package.json
+│   └── jest.config.js       # Configuration des tests
 │
 ├── infrastructure/terraform/ # Configuration IaC AWS
-│   ├── main.tf
-│   ├── variables.tf
-│   ├── vpc.tf
-│   ├── ec2.tf
-│   ├── ecr.tf
-│   ├── security_groups.tf
-│   └── terraform.tfvars
+│   ├── main.tf              # Providers et backend S3
+│   ├── variables.tf         # Variables d'entrée
+│   ├── outputs.tf           # Outputs des ressources
+│   ├── vpc.tf               # VPC, subnets, route tables
+│   ├── ecs.tf               # ECS Cluster, Task Definition, Service
+│   ├── rds.tf               # Instance PostgreSQL RDS
+│   ├── ecr.tf               # Registry pour images Docker
+│   ├── alb.tf               # Application Load Balancer
+│   ├── security_groups.tf   # Règles de sécurité
+│   ├── cloudwatch.tf        # Log groups et métriques
+│   └── terraform.tfvars     # Valeurs des variables (à ne pas commiter)
 │
 ├── .github/workflows/        # Pipelines CI/CD
-│   ├── ci.yml               # Tests et linting
-│   └── cd.yml               # Build et déploiement
+│   ├── ci.yml               # Tests, linting, sécurité, couverture
+│   └── cd.yml               # Build Docker, push ECR, déploiement ECS
 │
-├── docker-compose.yml        # Orchestration multi-conteneurs
-├── .env                      # Variables d'environnement (à ne pas commiter)
-└── .gitignore
+├── docker-compose.yml        # Orchestration multi-conteneurs (dev)
+├── .env.example              # Template des variables d'environnement
+├── .gitignore                # Fichiers exclus du versioning
+├── .gitattributes            # Configuration Git (line endings)
+└── README.md                 # Ce fichier
 ```
 
 ---
@@ -126,6 +142,7 @@ mon-ecommerce/
 - **PostgreSQL** >= 14 (si exécution locale sans Docker)
 - **Terraform** >= 1.5 (pour le déploiement AWS)
 - **AWS CLI** configuré (pour Terraform)
+- **Git** >= 2.30
 
 ---
 
@@ -138,10 +155,9 @@ cd mon-ecommerce
 ```
 
 ### 2. Configurer les variables d'environnement
-Copiez le fichier `.env` exemple et complétez les valeurs :
+Copiez le fichier `.env.example` et complétez les valeurs :
 ```bash
-cp .env.example .env  # si disponible
-# Sinon, créez manuellement le fichier .env à la racine
+cp .env.example .env
 ```
 
 ### 3. Installation locale (sans Docker)
@@ -150,7 +166,7 @@ cp .env.example .env  # si disponible
 ```bash
 cd backend
 npm install
-npm run dev  # Mode développement avec nodemon
+npm run dev
 ```
 > Le serveur démarre sur `http://localhost:5000`
 
@@ -160,7 +176,7 @@ cd frontend
 npm install
 npm start
 ```
-> L'application React démarre sur `http://localhost:3001` (port configuré dans docker-compose)
+> L'application React démarre sur `http://localhost:3001`
 
 ---
 
@@ -180,6 +196,7 @@ docker-compose up -d --build
 |---------|-----|------|
 | Frontend React | http://localhost:3001 | 3001:80 |
 | Backend API | http://localhost:5000 | 5000:5000 |
+| Documentation API | http://localhost:5000/api-docs | 5000:5000 |
 | Base de données | *interne au réseau Docker* | 5432 |
 
 ### Commandes utiles
@@ -197,6 +214,10 @@ docker-compose logs -f backend
 
 # Nettoyer les volumes (attention : supprime les données)
 docker-compose down -v
+
+# Exécuter les tests dans les conteneurs
+docker-compose run backend npm test
+docker-compose run frontend npm test
 ```
 
 ---
@@ -210,15 +231,26 @@ Créez un fichier `.env` à la racine du projet avec les variables suivantes :
 PORT=5000
 DATABASE_URL=postgresql://user:password@localhost:5432/ecommerce_db
 JWT_SECRET=votre_secret_jwt_tres_securise_ici
+JWT_EXPIRE=7d
 NODE_ENV=development
 
 # === Frontend ===
 REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_STRIPE_PUBLIC_KEY=pk_test_votre_cle
+
+# === Paiement (Stripe ou autre) ===
+STRIPE_SECRET_KEY=sk_test_votre_cle_secrete
+STRIPE_WEBHOOK_SECRET=whsec_votre_secret
 
 # === AWS / Terraform (pour le déploiement) ===
 AWS_REGION=eu-west-3
 AWS_PROFILE=default
 TERRAFORM_STATE_BUCKET=mon-ecommerce-tfstate
+ECR_REPO_URL=123456789.dkr.ecr.eu-west-3.amazonaws.com/mon-ecommerce
+
+# === Monitoring ===
+CLOUDWATCH_LOG_GROUP=/ecs/mon-ecommerce
+PROMETHEUS_ENDPOINT=/metrics
 ```
 
 > **Important** : Ne commitez jamais le fichier `.env` dans le repository. Il est déjà listé dans `.gitignore`.
@@ -229,27 +261,91 @@ TERRAFORM_STATE_BUCKET=mon-ecommerce-tfstate
 
 ### Tests locaux
 ```bash
-# Backend (à implémenter selon votre framework de test)
+# Backend (Jest + Supertest)
 cd backend
-npm test
+npm test                    # Exécuter les tests
+npm run test:coverage       # Avec rapport de couverture
+npm run test:watch          # Mode watch pour le développement
 
 # Frontend (Jest + React Testing Library)
 cd frontend
 npm test
-npm run test:coverage  # si configuré
+npm run test:coverage
 ```
+
+### Couverture minimale requise
+Le projet doit maintenir une couverture de tests d'au moins 70% :
+- Tests unitaires pour les contrôleurs et services
+- Tests d'intégration pour les endpoints API
+- Tests de composants React critiques
 
 ### Pipelines GitHub Actions
 Le projet inclut deux workflows :
 
 | Workflow | Fichier | Déclencheur | Actions |
 |----------|---------|-------------|---------|
-| **CI** | `.github/workflows/ci.yml` | Push/PR sur `main` | Lint, tests frontend et backend |
-| **CD** | `.github/workflows/cd.yml` | Merge sur `main` | Build Docker, push vers ECR, déploiement |
+| **CI** | `.github/workflows/ci.yml` | Push/PR sur `main` | Lint, tests frontend/backend, sécurité (npm audit), couverture |
+| **CD** | `.github/workflows/cd.yml` | Merge sur `main` | Build Docker multi-stage, scan de vulnérabilités, push ECR, déploiement ECS |
 
-Pour activer le déploiement automatique :
-1. Configurez les secrets GitHub : `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`
-2. Assurez-vous que le registry ECR existe dans votre compte AWS
+### Configuration des secrets GitHub
+Pour activer le déploiement automatique, configurez les secrets suivants dans votre repository :
+```
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_REGION
+STRIPE_SECRET_KEY
+```
+
+---
+
+## Documentation API
+
+L'API est documentée selon le standard OpenAPI 3.0 avec Swagger UI.
+
+### Accéder à la documentation interactive
+Une fois le backend lancé :
+```
+http://localhost:5000/api-docs
+```
+
+### Endpoints principaux
+
+#### Authentification
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| POST | /api/auth/register | Inscription utilisateur |
+| POST | /api/auth/login | Connexion et génération JWT |
+| GET | /api/auth/me | Récupérer le profil utilisateur |
+
+#### Produits
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | /api/products | Liste des produits avec pagination |
+| GET | /api/products/:id | Détail d'un produit |
+| POST | /api/products | Créer un produit (admin) |
+| PUT | /api/products/:id | Mettre à jour un produit (admin) |
+| DELETE | /api/products/:id | Supprimer un produit (admin) |
+
+#### Panier et Commandes
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | /api/cart | Récupérer le panier utilisateur |
+| POST | /api/cart | Ajouter un produit au panier |
+| DELETE | /api/cart/:productId | Retirer un produit du panier |
+| POST | /api/orders | Créer une commande |
+| GET | /api/orders | Historique des commandes |
+
+#### Paiement
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| POST | /api/payment/create-intent | Créer une intention de paiement |
+| POST | /api/payment/webhook | Webhook pour confirmation paiement |
+
+### Générer la documentation localement
+```bash
+cd backend
+npm run docs:generate  # Si script configuré
+```
 
 ---
 
@@ -258,12 +354,13 @@ Pour activer le déploiement automatique :
 ### Prérequis AWS
 - Un compte AWS configuré avec les permissions nécessaires
 - AWS CLI installé et authentifié : `aws configure`
+- Bucket S3 pour l'état Terraform (déjà créé ou à créer)
 
 ### Initialisation et déploiement
 ```bash
 cd infrastructure/terraform
 
-# Initialiser Terraform
+# Initialiser Terraform avec backend S3
 terraform init
 
 # Valider la configuration
@@ -277,16 +374,47 @@ terraform apply -var-file=terraform.tfvars
 ```
 
 ### Ressources déployées
-- VPC avec sous-réseaux publics et privés
-- Security Groups pour le backend et frontend
-- Instance EC2 pour l'hébergement
-- Registry ECR pour les images Docker
-- Paires de clés SSH pour l'accès sécurisé
+- VPC avec sous-réseaux publics et privés sur plusieurs zones de disponibilité
+- Security Groups pour ECS, RDS, ALB avec règles restrictives
+- Cluster ECS Fargate pour l'orchestration des conteneurs
+- Task Definition avec health checks et logging CloudWatch
+- Instance RDS PostgreSQL avec sauvegardes automatiques
+- Registry ECR pour le stockage des images Docker
+- Application Load Balancer avec redirection HTTPS
+- CloudWatch Log Groups pour la centralisation des logs
+
+### Mise à jour de l'application
+Après un push sur la branche `main`, le pipeline CD :
+1. Build l'image Docker avec le tag du commit
+2. Scan l'image pour vulnérabilités
+3. Push vers ECR
+4. Met à jour le service ECS avec la nouvelle image
 
 ### Nettoyage (attention : destructif)
 ```bash
 terraform destroy -var-file=terraform.tfvars
 ```
+
+---
+
+## Monitoring
+
+### CloudWatch
+Les logs applicatifs sont centralisés dans CloudWatch :
+- Logs backend : `/ecs/mon-ecommerce/backend`
+- Logs frontend : `/ecs/mon-ecommerce/frontend`
+- Métriques custom : temps de réponse, erreurs, taux de conversion
+
+### Métriques applicatives
+L'application expose des métriques Prometheus à l'endpoint :
+```
+GET /metrics
+```
+
+### Health checks
+- Endpoint de santé : `GET /api/health`
+- Docker HEALTHCHECK configuré dans les Dockerfile
+- ECS utilise les health checks pour le rolling deployment
 
 ---
 
@@ -301,7 +429,7 @@ Les contributions sont les bienvenues ! Voici comment procéder :
 5. Ouvrez une Pull Request
 
 ### Conventions de commit
-Ce projet utilise le format [Conventional Commits](https://www.conventionalcommits.org/) :
+Ce projet utilise le format Conventional Commits :
 - `feat:` Nouvelle fonctionnalité
 - `fix:` Correction de bug
 - `docs:` Documentation uniquement
@@ -309,6 +437,13 @@ Ce projet utilise le format [Conventional Commits](https://www.conventionalcommi
 - `refactor:` Changement de code ni fix ni feature
 - `test:` Ajout ou correction de tests
 - `chore:` Maintenance, dépendances, config
+
+### Revue de code
+Toute Pull Request doit :
+- Passer les checks CI (tests, linting, sécurité)
+- Inclure des tests pour les nouvelles fonctionnalités
+- Maintenir ou améliorer la couverture de code
+- Être approuvée par au moins un reviewer
 
 ---
 
@@ -327,10 +462,6 @@ Distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
 
 > **Note** : Ce projet est en développement actif. N'hésitez pas à ouvrir une issue pour signaler un bug ou proposer une amélioration !
 
-```markdown
-Si ce projet vous aide, n'oubliez pas de mettre une étoile sur GitHub !
-```
-
 ---
 
-*Document généré le 28 avril 2026 — Dernière mise à jour : commit `aafc7b0` (paiement success)*
+*Document mis à jour le 28 avril 2026 — Dernière modification : commit `0a901db` (ajout gitignore and gitattributes)*
