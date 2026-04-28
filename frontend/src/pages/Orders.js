@@ -33,16 +33,16 @@ function Orders() {
     }
   };
 
-  if (!user) return <div style={styles.container}>Connectez-vous pour voir vos commandes.</div>;
-  if (loading) return <div style={styles.container}>Chargement...</div>;
+  if (!user) return <div style={styles.empty}>Connectez-vous pour voir vos commandes.</div>;
+  if (loading) return <div style={styles.empty}>Chargement...</div>;
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Mes Commandes 📦</h1>
+      <h1 style={styles.pageTitle}>VOS COMMANDES</h1>
       {orders.length === 0 ? (
         <div style={styles.empty}>
           <p>Vous n'avez passé aucune commande.</p>
-          <Link to="/" style={styles.shopBtn}>Continuer mes achats</Link>
+          <Link to="/shop" style={styles.shopBtn}>CONTINUER VOS ACHATS</Link>
         </div>
       ) : (
         <div style={styles.list}>
@@ -67,17 +67,17 @@ function Orders() {
 }
 
 const styles = {
-  container: { maxWidth: '800px', margin: '30px auto', padding: '0 20px' },
-  title: { fontSize: '26px', marginBottom: '24px', color: '#1a1a2e' },
-  empty: { textAlign: 'center', padding: '50px', background: 'white', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' },
-  shopBtn: { display: 'inline-block', marginTop: '15px', padding: '10px 20px', background: '#e94560', color: 'white', textDecoration: 'none', borderRadius: '8px' },
-  list: { display: 'flex', flexDirection: 'column', gap: '15px' },
-  card: { background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '15px', marginBottom: '15px' },
-  orderId: { fontSize: '18px', fontWeight: 'bold', color: '#1a1a2e' },
-  badge: { padding: '5px 12px', borderRadius: '20px', color: 'white', fontSize: '14px', fontWeight: 'bold' },
-  body: { display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '15px' },
-  price: { fontSize: '18px', fontWeight: 'bold', color: '#e94560' }
+  container: { maxWidth: '1200px', margin: '40px auto', padding: '0 20px', fontFamily: 'Inter, sans-serif' },
+  pageTitle: { fontSize: '28px', fontWeight: '300', marginBottom: '40px', color: '#111', letterSpacing: '1px' },
+  empty: { textAlign: 'center', padding: '60px', color: '#888', fontSize: '18px' },
+  shopBtn: { display: 'inline-block', marginTop: '20px', padding: '12px 24px', background: '#111', color: 'white', textDecoration: 'none', fontSize: '13px', fontWeight: '600', letterSpacing: '1px', transition: 'background 0.2s' },
+  list: { display: 'flex', flexDirection: 'column', gap: '20px' },
+  card: { padding: '24px', border: '1px solid #eee', borderRadius: '4px', background: '#fff' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', borderBottom: '1px solid #f9f9f9', paddingBottom: '15px' },
+  orderId: { fontSize: '18px', fontWeight: '600', color: '#111' },
+  badge: { padding: '6px 14px', borderRadius: '4px', color: 'white', fontSize: '12px', fontWeight: '600', letterSpacing: '0.5px' },
+  body: { display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px', color: '#555' },
+  price: { fontSize: '16px', fontWeight: '700', color: '#111' }
 };
 
 export default Orders;

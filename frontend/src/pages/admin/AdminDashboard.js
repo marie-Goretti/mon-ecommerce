@@ -1,27 +1,36 @@
 import { useState, useEffect } from 'react';
-import { getProducts, getCategories, getUsers } from '../../api';
+import { getProducts, getCategories, getUsers, getAllOrders } from '../../api';
 import { ArrowUpRight, Plus, Play } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({ products: 0, categories: 0, users: 0, orders: 12 });
+  const navigate = useNavigate();
+  const [stats, setStats] = useState({ products: 0, categories: 0, users: 0, orders: 0 });
   const [latestUsers, setLatestUsers] = useState([]); 
+  const [pendingOrders, setPendingOrders] = useState([]); 
 
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [prodRes, catRes, userRes] = await Promise.all([
+        const [prodRes, catRes, userRes, orderRes] = await Promise.all([
           getProducts(),
           getCategories(),
-          getUsers()
+          getUsers(),
+          getAllOrders()
         ]);
+        
+        const deliveredOrders = orderRes.data.filter(o => o.status === 'Livrée');
+        const pending = orderRes.data.filter(o => o.status === 'En attente');
+        
         setStats({
           products: prodRes.data.length,
           categories: catRes.data.length,
           users: userRes.data.length,
-          orders: 12
+          orders: deliveredOrders.length
         });
         setLatestUsers(userRes.data.slice(0, 5)); 
+        setPendingOrders(pending); 
       } catch (error) {
         console.error("Erreur lors du chargement des statistiques", error);
       }
@@ -42,7 +51,7 @@ const AdminDashboard = () => {
         <div className="stat-card primary-card">
           <div className="stat-card-top">
             <h3>Total Produits</h3>
-            <button className="stat-icon-btn"><ArrowUpRight size={14} /></button>
+            <button className="stat-icon-btn" onClick={() => navigate('/admin/products')}><ArrowUpRight size={14} /></button>
           </div>
           <h2>{stats.products}</h2>
           <div className="stat-card-bottom">
@@ -52,8 +61,8 @@ const AdminDashboard = () => {
 
         <div className="stat-card">
           <div className="stat-card-top">
-            <h3>Commandes</h3>
-            <button className="stat-icon-btn"><ArrowUpRight size={14} /></button>
+            <h3>Commandes Livrées</h3>
+            <button className="stat-icon-btn" onClick={() => navigate('/admin/orders')}><ArrowUpRight size={14} /></button>
           </div>
           <h2>{stats.orders}</h2>
           <div className="stat-card-bottom">
@@ -64,7 +73,7 @@ const AdminDashboard = () => {
         <div className="stat-card">
           <div className="stat-card-top">
             <h3>Utilisateurs</h3>
-            <button className="stat-icon-btn"><ArrowUpRight size={14} /></button>
+            <button className="stat-icon-btn" onClick={() => navigate('/admin/users')}><ArrowUpRight size={14} /></button>
           </div>
           <h2>{stats.users}</h2>
           <div className="stat-card-bottom">
@@ -75,7 +84,7 @@ const AdminDashboard = () => {
         <div className="stat-card">
           <div className="stat-card-top">
             <h3>Catégories</h3>
-            <button className="stat-icon-btn"><ArrowUpRight size={14} /></button>
+            <button className="stat-icon-btn" onClick={() => navigate('/admin/categories')}><ArrowUpRight size={14} /></button>
           </div>
           <h2>{stats.categories}</h2>
           <div className="stat-card-bottom">
@@ -100,10 +109,18 @@ const AdminDashboard = () => {
 
         <div className="reminders-section">
           <h3>Rappels</h3>
-          <div className="reminder-card">
-            <h4>Préparer Commande #1024</h4>
-            <p>Heure : 14h00 - 16h00</p>
-            <button className="btn-meeting"><Play size={16} /> Commencer</button>
+          <div className="reminders-list" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+            {pendingOrders.length > 0 ? (
+              pendingOrders.map(order => (
+                <div key={order.id} className="reminder-card" style={{ marginBottom: '10px' }}>
+                  <h4>Préparer Commande #{order.id}</h4>
+                  <p>Date : {new Date(order.created_at).toLocaleDateString()}</p>
+                  <button className="btn-meeting" onClick={() => navigate('/admin/orders')}><Play size={16} /> Gérer la commande</button>
+                </div>
+              ))
+            ) : (
+              <p style={{ color: '#888', fontSize: '14px', marginTop: '15px' }}>Aucune commande en attente.</p>
+            )}
           </div>
         </div>
 

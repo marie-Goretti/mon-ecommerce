@@ -27,7 +27,7 @@ function Cart() {
 
   const subtotal = cart.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
 
-  if (!user) return <p style={styles.empty}>Connectez-vous pour voir votre panier 🔒</p>;
+  if (!user) return <p style={styles.empty}>Connectez-vous pour voir votre panier.</p>;
 
   return (
     <div style={styles.container}>
