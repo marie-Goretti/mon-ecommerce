@@ -434,8 +434,7 @@ export default function About() {
                 <div className="ab-vision-placeholder">
                   <Sofa size={64} />
                   <span style={{ fontSize: 13, fontFamily: 'DM Sans, sans-serif' }}>
-                    <img src={Living_room} alt="Table" style={styles.catImage} />
-                  </span>
+                    <img src={Living_room} alt="Table" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }} />                  </span>
                 </div>
               </div>
               <div className="ab-vision-deco" />
