@@ -23,9 +23,6 @@ function ProductCard({ product }) {
   return (
     <Link to={`/products/${product.id}`} style={styles.card}>
       <div style={styles.imageContainer}>
-        <div style={styles.heartIcon}>
-          <Heart size={16} color="#666" />
-        </div>
         <img src={product.image_url} alt={product.name} style={styles.image} />
       </div>
       <div style={styles.info}>
@@ -70,19 +67,6 @@ const styles = {
     aspectRatio: '1 / 1',
     width: '100%',
     overflow: 'hidden'
-  },
-  heartIcon: {
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    background: 'white',
-    borderRadius: '50%',
-    width: '30px',
-    height: '30px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
   },
   image: {
     width: '100%',

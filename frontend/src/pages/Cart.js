@@ -58,12 +58,6 @@ function Cart() {
                     <span>{parseFloat(item.price).toFixed(0)} FCFA</span>
                   </div>
                   
-                  <div style={styles.quantitySelector}>
-                    <button onClick={handleQuantityClick} style={styles.qtyBtn}>-</button>
-                    <span style={styles.qtyValue}>{item.quantity}</span>
-                    <button onClick={handleQuantityClick} style={styles.qtyBtn}>+</button>
-                  </div>
-                  
                   <div style={styles.itemTotal}>
                     <div style={styles.totalPrice}>{(parseFloat(item.price) * item.quantity).toFixed(0)} FCFA</div>
                   </div>
@@ -144,7 +138,6 @@ const styles = {
   itemDesc: { fontSize: '13px', color: '#888', margin: 0 },
   priceOption: { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '500', minWidth: '100px' },
   radioChecked: { width: '12px', height: '12px', borderRadius: '50%', border: '4px solid #111', background: 'white' },
-  quantitySelector: { display: 'flex', alignItems: 'center', background: '#f8f9fa', borderRadius: '4px', padding: '4px 10px', border: '1px solid #eee' },
   qtyBtn: { background: 'none', border: 'none', fontSize: '16px', color: '#111', cursor: 'pointer', padding: '0 8px' },
   qtyValue: { fontSize: '14px', fontWeight: '600', minWidth: '20px', textAlign: 'center' },
   itemTotal: { minWidth: '80px', textAlign: 'right' },
