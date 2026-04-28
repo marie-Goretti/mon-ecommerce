@@ -75,6 +75,7 @@ function Navbar() {
           <Link to="/" style={linkStyle('/')} onClick={() => setIsMobileMenuOpen(false)}>Accueil</Link>
           <Link to="/shop" style={linkStyle('/shop')} onClick={() => setIsMobileMenuOpen(false)}>Boutique</Link>
           <Link to="/about" style={linkStyle('/about')} onClick={() => setIsMobileMenuOpen(false)}>À propos</Link>
+          <Link to="/checkout" style={linkStyle('/checkout')} onClick={() => setIsMobileMenuOpen(false)}>Checkout</Link>
         </div>
 
       {/* Right: Icons & User Actions */}
