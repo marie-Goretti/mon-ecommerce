@@ -20,11 +20,21 @@ import AdminUsers from './pages/admin/AdminUsers';
 import AdminOrders from './pages/admin/AdminOrders';
 import Orders from './pages/Orders';
 
+import { Outlet } from 'react-router-dom';
+
+const LayoutPublic = () => (
+  <>
+    <Navbar />
+    <Outlet />
+    <Footer />
+  </>
+);
+
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
+        <Route element={<LayoutPublic />}>
         <Route path="/" element={<Home />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/login" element={<Login />} />
@@ -36,6 +46,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
+        </Route>
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
@@ -46,7 +57,6 @@ function App() {
           <Route path="orders" element={<AdminOrders />} />
         </Route>
       </Routes>
-      <Footer />
     </BrowserRouter>
   );
 }

@@ -17,7 +17,11 @@ function Login() {
     try {
       const res = await login(form);
       loginUser(res.data.user, res.data.token);
-      navigate('/');
+      if (res.data.user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Erreur de connexion');
     } finally {
