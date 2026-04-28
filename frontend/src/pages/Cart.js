@@ -16,14 +16,9 @@ function Cart() {
     }
   };
 
-  const handleCheckout = async () => {
-    try {
-      await createOrder();
-      await fetchCart();
-      navigate('/orders');
-    } catch (err) {
-      alert("Erreur lors de la commande");
-    }
+  const handleCheckout = () => {
+    if (cart.length === 0) return;
+    navigate('/checkout');
   };
 
   const handleQuantityClick = () => {

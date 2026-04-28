@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getProducts, getCategories, getUsers } from '../../api';
-import { ArrowUpRight, Plus, Play } from 'lucide-react'; 
+import { ArrowUpRight, Plus, Play } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({ products: 0, categories: 0, users: 0, orders: 12 });
@@ -17,7 +17,7 @@ const AdminDashboard = () => {
           products: prodRes.data.length,
           categories: catRes.data.length,
           users: userRes.data.length,
-          orders: 12 
+          orders: 12
         });
       } catch (error) {
         console.error("Erreur lors du chargement des statistiques", error);
@@ -32,10 +32,6 @@ const AdminDashboard = () => {
         <div>
           <h1>Tableau de bord</h1>
           <p>Gérez, analysez et développez votre boutique facilement.</p>
-        </div>
-        <div className="dashboard-header-actions">
-          <button className="btn-add-project"><Plus size={16} /> Ajouter Produit</button>
-          <button className="btn-export">Exporter Données</button>
         </div>
       </div>
 
@@ -104,7 +100,7 @@ const AdminDashboard = () => {
           <div className="reminder-card">
             <h4>Préparer Commande #1024</h4>
             <p>Heure : 14h00 - 16h00</p>
-            <button className="btn-meeting"><Play size={16}/> Commencer</button>
+            <button className="btn-meeting"><Play size={16} /> Commencer</button>
           </div>
         </div>
 
@@ -139,7 +135,7 @@ const AdminDashboard = () => {
               <span className="status-badge status-completed">Vérifié</span>
             </div>
             <div className="team-member">
-              <div className="member-avatar" style={{background: '#f09653'}}>M</div>
+              <div className="member-avatar" style={{ background: '#f09653' }}>M</div>
               <div className="member-info">
                 <h4>Marie Curie</h4>
                 <p>Nouveau client</p>

@@ -76,7 +76,9 @@ function Navbar() {
           <Link to="/shop" style={linkStyle('/shop')} onClick={() => setIsMobileMenuOpen(false)}>Boutique</Link>
           <Link to="/about" style={linkStyle('/about')} onClick={() => setIsMobileMenuOpen(false)}>À propos</Link>
           <Link to="/contact" style={linkStyle('/contact')} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
-          <Link to="/blog" style={linkStyle('/blog')} onClick={() => setIsMobileMenuOpen(false)}>Blog</Link>
+          {user && (
+            <Link to="/orders" style={linkStyle('/orders')} onClick={() => setIsMobileMenuOpen(false)}>Commandes</Link>
+          )}
         </div>
 
       {/* Right: Icons & User Actions */}
