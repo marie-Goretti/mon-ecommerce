@@ -3,16 +3,7 @@
 > Application e-commerce full-stack moderne avec architecture microservices, conteneurisation Docker et infrastructure as code avec Terraform/AWS.
 
 
-
-
-
-
-
-<img width="1874" height="878" alt="Capture d&#39;écran 2026-04-29 012606" src="https://github.com/user-attachments/assets/3a167ac1-43cc-4655-b11e-ce2c5355cd66" />
-
-
-
-
+<img width="1874" height="878" alt="Capture d&#39;écran 2026-04-29 012606" src="https://github.com/user-attachments/assets/3a167ac1-43cc-4655-b11e-ce2c5355cd66" /><br><br>
 
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
@@ -258,32 +249,39 @@ docker-compose run frontend npm test
 
 ---
 
-## Variables d'environnement
-# Base de données (Neon PostgreSQL — cloud managé)
+### Variables d'environnement
+
+Créez un fichier `.env` à la racine avec les variables suivantes :
+
+```env
+# === Backend ===
+PORT=5000
 DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/ecommerce_db?sslmode=require
+JWT_SECRET=votre_secret_jwt_tres_securise_ici
+JWT_EXPIRE=7d
+NODE_ENV=development
+
+# === Frontend ===
+REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_STRIPE_PUBLIC_KEY=pk_test_votre_cle
+
+# === Paiement (Stripe) ===
+STRIPE_SECRET_KEY=sk_test_votre_cle_secrete
+STRIPE_WEBHOOK_SECRET=whsec_votre_secret
+
+# === AWS / Terraform ===
+AWS_REGION=eu-west-3
+ECR_REPO_URL=123456789.dkr.ecr.eu-west-3.amazonaws.com/mon-ecommerce
+
+# === Monitoring ===
+CLOUDWATCH_LOG_GROUP=/ecs/mon-ecommerce
+```
 
 > **Important** : Ne commitez jamais le fichier `.env` dans le repository. Il est déjà listé dans `.gitignore`.
 
 ---
 
 ## Tests et CI/CD
-
-### Tests locaux
-
-```bash
-# Backend (Jest + Supertest)
-cd backend
-npm test                    # Exécuter les tests
-npm run test:coverage       # Avec rapport de couverture
-npm run test:watch          # Mode watch pour le développement
-
-# Frontend (Jest + React Testing Library)
-cd frontend
-npm test
-npm run test:coverage
-```
-
-## Tests
 
 | Dossier | Type | Framework |
 |---------|------|-----------|
@@ -292,6 +290,10 @@ npm run test:coverage
 | `backend/src/` | Tests unitaires backend | Jest |
 | `frontend/src/` | Tests composants | React Testing Library |
 
+```bash
+cd backend && npm test && npm run test:coverage
+cd frontend && npm test
+```
 
 
 ### Couverture minimale requise
