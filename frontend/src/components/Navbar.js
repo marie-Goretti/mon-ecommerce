@@ -8,7 +8,7 @@ function Navbar() {
   const { user, cart, logoutUser } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -69,76 +69,75 @@ function Navbar() {
 
       {/* Right side wrapper for mobile menu */}
       <div className={`nav-right-container ${isMobileMenuOpen ? 'mobile-nav-menu' : ''}`}>
-        
+
         {/* Middle: Links */}
         <div style={styles.links} className="mobile-nav-links">
           <Link to="/" style={linkStyle('/')} onClick={() => setIsMobileMenuOpen(false)}>Accueil</Link>
           <Link to="/shop" style={linkStyle('/shop')} onClick={() => setIsMobileMenuOpen(false)}>Boutique</Link>
           <Link to="/about" style={linkStyle('/about')} onClick={() => setIsMobileMenuOpen(false)}>À propos</Link>
-          <Link to="/checkout" style={linkStyle('/checkout')} onClick={() => setIsMobileMenuOpen(false)}>Checkout</Link>
           {user && <Link to="/orders" style={linkStyle('/orders')} onClick={() => setIsMobileMenuOpen(false)}>Commandes</Link>}
         </div>
 
-      {/* Right: Icons & User Actions */}
-      <div style={styles.iconsContainer} className="mobile-nav-icons">
-        <div style={styles.searchWrapper} className="mobile-search-wrapper" ref={searchRef}>
-          <div style={styles.searchBar} className="mobile-search-bar">
-            <Search size={16} style={{ color: '#888' }} />
-            <input
-              type="text"
-              placeholder="Rechercher..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={styles.searchInput}
-              className="mobile-search-input"
-            />
-          </div>
-          {searchResults.length > 0 && (
-            <div style={styles.searchDropdown}>
-              <div style={styles.resultsList}>
-                {searchResults.map(prod => (
-                  <Link key={prod.id} to={`/products/${prod.id}`} style={styles.resultItem} onClick={() => { setSearchResults([]); setSearchQuery(''); }}>
-                    <img src={prod.image_url} alt={prod.name} style={styles.resultImg} />
-                    <div style={styles.resultInfo}>
-                      <div style={styles.resultName}>{prod.name}</div>
-                      <div style={styles.resultPrice}>{parseFloat(prod.price).toFixed(0)} FCFA</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+        {/* Right: Icons & User Actions */}
+        <div style={styles.iconsContainer} className="mobile-nav-icons">
+          <div style={styles.searchWrapper} className="mobile-search-wrapper" ref={searchRef}>
+            <div style={styles.searchBar} className="mobile-search-bar">
+              <Search size={16} style={{ color: '#888' }} />
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={styles.searchInput}
+                className="mobile-search-input"
+              />
             </div>
+            {searchResults.length > 0 && (
+              <div style={styles.searchDropdown}>
+                <div style={styles.resultsList}>
+                  {searchResults.map(prod => (
+                    <Link key={prod.id} to={`/products/${prod.id}`} style={styles.resultItem} onClick={() => { setSearchResults([]); setSearchQuery(''); }}>
+                      <img src={prod.image_url} alt={prod.name} style={styles.resultImg} />
+                      <div style={styles.resultInfo}>
+                        <div style={styles.resultName}>{prod.name}</div>
+                        <div style={styles.resultPrice}>{parseFloat(prod.price).toFixed(0)} FCFA</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {user ? (
+            <>
+              <Link to="/cart" style={styles.iconWrapper} onClick={() => setIsMobileMenuOpen(false)}>
+                <ShoppingCart size={20} style={styles.icon} />
+                {cart.length > 0 && <span style={styles.badge}>{cart.length}</span>}
+              </Link>
+
+              {user.role === 'admin' && (
+                <Link to="/admin" style={styles.iconWrapper} title="Admin" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Settings size={20} style={{ ...styles.icon, color: '#f09653' }} />
+                </Link>
+              )}
+
+              <Link to="/profile" style={{ ...styles.userInfo, textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
+                <User size={20} style={styles.icon} />
+                <span style={styles.username}>{user.name}</span>
+              </Link>
+
+              <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} style={styles.logoutBtn} title="Logout">
+                <LogOut size={20} />
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" style={{ ...styles.link, fontSize: '14px', fontWeight: '500' }} onClick={() => setIsMobileMenuOpen(false)}>Se connecter</Link>
+              <Link to="/register" className="btn-primary" style={{ fontSize: '13px', padding: '8px 16px' }} onClick={() => setIsMobileMenuOpen(false)}>S'inscrire</Link>
+            </>
           )}
         </div>
-
-        {user ? (
-          <>
-            <Link to="/cart" style={styles.iconWrapper}>
-              <ShoppingCart size={20} style={styles.icon} />
-              {cart.length > 0 && <span style={styles.badge}>{cart.length}</span>}
-            </Link>
-
-            {user.role === 'admin' && (
-               <Link to="/admin" style={styles.iconWrapper} title="Admin">
-                 <Settings size={20} style={{ ...styles.icon, color: '#f09653' }} />
-               </Link>
-            )}
-
-            <Link to="/profile" style={{...styles.userInfo, textDecoration: 'none', color: 'inherit'}}>
-              <User size={20} style={styles.icon} />
-              <span style={styles.username}>{user.name}</span>
-            </Link>
-
-            <button onClick={handleLogout} style={styles.logoutBtn} title="Logout">
-              <LogOut size={20} />
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" style={{ ...styles.link, fontSize: '14px', fontWeight: '500' }}>Se connecter</Link>
-            <Link to="/register" className="btn-primary" style={{ fontSize: '13px', padding: '8px 16px' }}>S'inscrire</Link>
-          </>
-        )}
-      </div>
       </div>
     </nav>
   );

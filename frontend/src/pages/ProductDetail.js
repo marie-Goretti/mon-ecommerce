@@ -9,7 +9,7 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
-  
+
   const [quantity, setQuantity] = useState(1);
 
   const { user, fetchCart } = useApp();
@@ -82,7 +82,7 @@ function ProductDetail() {
       <div style={styles.breadcrumb}>
         Boutique / {product.category || 'Catégorie'} / <strong>{product.name}</strong>
       </div>
-      
+
       <div style={styles.content} className="mobile-col">
         {/* Left side: Images */}
         <div style={styles.gallery} className="mobile-w-100">
@@ -105,12 +105,11 @@ function ProductDetail() {
             {product.description || "Un équilibre parfait entre un son haute fidélité exaltant et la magie de l'audio sans effort."}
           </p>
           <div style={styles.rating}>
-            ⭐⭐⭐⭐⭐ <span style={{color: '#888', fontSize: '13px'}}>(121)</span>
+            ⭐⭐⭐⭐⭐ <span style={{ color: '#888', fontSize: '13px' }}>(121)</span>
           </div>
 
           <div style={styles.priceContainer}>
             <span style={styles.price}>{parseFloat(product.price).toFixed(0)} FCFA</span>
-            <span style={styles.priceSub}> ou {parseFloat(product.price/6).toFixed(0)} FCFA/mois</span>
           </div>
           <p style={styles.priceDesc}>Paiements suggérés avec un financement spécial sur 6 mois</p>
 
@@ -123,8 +122,8 @@ function ProductDetail() {
               <button onClick={() => handleQuantity(1)} style={styles.qtyBtn}>+</button>
             </div>
             <div style={styles.stockAlert}>
-              <span style={{color: '#f97316', fontWeight: 'bold'}}>Seulement <span style={{color: 'red'}}>{product.stock} articles</span> restants !</span><br/>
-              <span style={{color: '#666'}}>Ne le manquez pas</span>
+              <span style={{ color: '#f97316', fontWeight: 'bold' }}>Seulement <span style={{ color: 'red' }}>{product.stock} articles</span> restants !</span><br />
+              <span style={{ color: '#666' }}>Ne le manquez pas</span>
             </div>
           </div>
 
@@ -148,7 +147,7 @@ function ProductDetail() {
               <RotateCcw size={24} color="#f97316" />
               <div>
                 <p style={styles.deliveryTitle}>Retours</p>
-                <p style={styles.deliverySub}>Retours gratuits sous 30 jours. <a href="#details" style={{textDecoration: 'underline'}}>Détails</a></p>
+                <p style={styles.deliverySub}>Retours gratuits sous 30 jours. <a href="#details" style={{ textDecoration: 'underline' }}>Détails</a></p>
               </div>
             </div>
           </div>
