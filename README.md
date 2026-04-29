@@ -3,12 +3,13 @@
 > Application e-commerce full-stack moderne avec architecture microservices, conteneurisation Docker et infrastructure as code avec Terraform/AWS.
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
-![React](https://img.shields.io/badge/React-19.2.5-61DAFB?style=flat&logo=react&logoColor=black)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat&logo=nodedotjs&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=flat&logo=terraform&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=githubactions&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ---
 
@@ -32,6 +33,7 @@
 ## Fonctionnalités
 
 ### Frontend (React 19)
+
 - Page d'accueil avec produits mis en avant
 - Catalogue produits avec filtrage par catégories
 - Détail produit avec galerie d'images
@@ -43,6 +45,7 @@
 - Pages informatives : À propos, Blog, Contact
 
 ### Backend (Node.js/Express)
+
 - Authentification et autorisation (bcryptjs + jsonwebtoken)
 - Gestion CRUD des produits et catégories
 - Gestion du panier utilisateur
@@ -54,6 +57,7 @@
 - Middleware de gestion des erreurs et validation
 
 ### DevOps et Infrastructure
+
 - Conteneurisation complète avec Docker et docker-compose
 - Dockerfile multi-stage optimisé pour la production
 - Infrastructure as Code avec Terraform (AWS : VPC, ECS, RDS, ECR, Security Groups)
@@ -149,13 +153,16 @@ mon-ecommerce/
 ## Installation et configuration
 
 ### 1. Cloner le repository
+
 ```bash
 git clone https://github.com/marie-Goretti/mon-ecommerce.git
 cd mon-ecommerce
 ```
 
 ### 2. Configurer les variables d'environnement
+
 Copiez le fichier `.env.example` et complétez les valeurs :
+
 ```bash
 cp .env.example .env
 ```
@@ -163,19 +170,23 @@ cp .env.example .env
 ### 3. Installation locale (sans Docker)
 
 #### Backend
+
 ```bash
 cd backend
 npm install
 npm run dev
 ```
+
 > Le serveur démarre sur `http://localhost:5000`
 
 #### Frontend
+
 ```bash
 cd frontend
 npm install
 npm start
 ```
+
 > L'application React démarre sur `http://localhost:3001`
 
 ---
@@ -183,6 +194,7 @@ npm start
 ## Utilisation avec Docker
 
 ### Démarrer l'application complète
+
 ```bash
 # Build et lancement des conteneurs
 docker-compose up --build
@@ -192,14 +204,16 @@ docker-compose up -d --build
 ```
 
 ### Accès aux services
+
 | Service | URL | Port |
 |---------|-----|------|
 | Frontend React | http://localhost:3001 | 3001:80 |
 | Backend API | http://localhost:5000 | 5000:5000 |
 | Documentation API | http://localhost:5000/api-docs | 5000:5000 |
-| Base de données | *interne au réseau Docker* | 5432 |
+| Base de données | _interne au réseau Docker_ | 5432 |
 
 ### Commandes utiles
+
 ```bash
 # Arrêter les conteneurs
 docker-compose down
@@ -260,6 +274,7 @@ PROMETHEUS_ENDPOINT=/metrics
 ## Tests et CI/CD
 
 ### Tests locaux
+
 ```bash
 # Backend (Jest + Supertest)
 cd backend
@@ -274,12 +289,15 @@ npm run test:coverage
 ```
 
 ### Couverture minimale requise
+
 Le projet doit maintenir une couverture de tests d'au moins 70% :
+
 - Tests unitaires pour les contrôleurs et services
 - Tests d'intégration pour les endpoints API
 - Tests de composants React critiques
 
 ### Pipelines GitHub Actions
+
 Le projet inclut deux workflows :
 
 | Workflow | Fichier | Déclencheur | Actions |
@@ -288,7 +306,9 @@ Le projet inclut deux workflows :
 | **CD** | `.github/workflows/cd.yml` | Merge sur `main` | Build Docker multi-stage, scan de vulnérabilités, push ECR, déploiement ECS |
 
 ### Configuration des secrets GitHub
+
 Pour activer le déploiement automatique, configurez les secrets suivants dans votre repository :
+
 ```
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
@@ -303,7 +323,9 @@ STRIPE_SECRET_KEY
 L'API est documentée selon le standard OpenAPI 3.0 avec Swagger UI.
 
 ### Accéder à la documentation interactive
+
 Une fois le backend lancé :
+
 ```
 http://localhost:5000/api-docs
 ```
@@ -311,6 +333,7 @@ http://localhost:5000/api-docs
 ### Endpoints principaux
 
 #### Authentification
+
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
 | POST | /api/auth/register | Inscription utilisateur |
@@ -318,6 +341,7 @@ http://localhost:5000/api-docs
 | GET | /api/auth/me | Récupérer le profil utilisateur |
 
 #### Produits
+
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
 | GET | /api/products | Liste des produits avec pagination |
@@ -327,6 +351,7 @@ http://localhost:5000/api-docs
 | DELETE | /api/products/:id | Supprimer un produit (admin) |
 
 #### Panier et Commandes
+
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
 | GET | /api/cart | Récupérer le panier utilisateur |
@@ -336,12 +361,14 @@ http://localhost:5000/api-docs
 | GET | /api/orders | Historique des commandes |
 
 #### Paiement
+
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
 | POST | /api/payment/create-intent | Créer une intention de paiement |
 | POST | /api/payment/webhook | Webhook pour confirmation paiement |
 
 ### Générer la documentation localement
+
 ```bash
 cd backend
 npm run docs:generate  # Si script configuré
@@ -352,11 +379,13 @@ npm run docs:generate  # Si script configuré
 ## Déploiement avec Terraform
 
 ### Prérequis AWS
+
 - Un compte AWS configuré avec les permissions nécessaires
 - AWS CLI installé et authentifié : `aws configure`
 - Bucket S3 pour l'état Terraform (déjà créé ou à créer)
 
 ### Initialisation et déploiement
+
 ```bash
 cd infrastructure/terraform
 
@@ -374,6 +403,7 @@ terraform apply -var-file=terraform.tfvars
 ```
 
 ### Ressources déployées
+
 - VPC avec sous-réseaux publics et privés sur plusieurs zones de disponibilité
 - Security Groups pour ECS, RDS, ALB avec règles restrictives
 - Cluster ECS Fargate pour l'orchestration des conteneurs
@@ -384,13 +414,16 @@ terraform apply -var-file=terraform.tfvars
 - CloudWatch Log Groups pour la centralisation des logs
 
 ### Mise à jour de l'application
+
 Après un push sur la branche `main`, le pipeline CD :
+
 1. Build l'image Docker avec le tag du commit
 2. Scan l'image pour vulnérabilités
 3. Push vers ECR
 4. Met à jour le service ECS avec la nouvelle image
 
 ### Nettoyage (attention : destructif)
+
 ```bash
 terraform destroy -var-file=terraform.tfvars
 ```
@@ -400,18 +433,23 @@ terraform destroy -var-file=terraform.tfvars
 ## Monitoring
 
 ### CloudWatch
+
 Les logs applicatifs sont centralisés dans CloudWatch :
+
 - Logs backend : `/ecs/mon-ecommerce/backend`
 - Logs frontend : `/ecs/mon-ecommerce/frontend`
 - Métriques custom : temps de réponse, erreurs, taux de conversion
 
 ### Métriques applicatives
+
 L'application expose des métriques Prometheus à l'endpoint :
+
 ```
 GET /metrics
 ```
 
 ### Health checks
+
 - Endpoint de santé : `GET /api/health`
 - Docker HEALTHCHECK configuré dans les Dockerfile
 - ECS utilise les health checks pour le rolling deployment
@@ -429,7 +467,9 @@ Les contributions sont les bienvenues ! Voici comment procéder :
 5. Ouvrez une Pull Request
 
 ### Conventions de commit
+
 Ce projet utilise le format Conventional Commits :
+
 - `feat:` Nouvelle fonctionnalité
 - `fix:` Correction de bug
 - `docs:` Documentation uniquement
@@ -439,7 +479,9 @@ Ce projet utilise le format Conventional Commits :
 - `chore:` Maintenance, dépendances, config
 
 ### Revue de code
+
 Toute Pull Request doit :
+
 - Passer les checks CI (tests, linting, sécurité)
 - Inclure des tests pour les nouvelles fonctionnalités
 - Maintenir ou améliorer la couverture de code
@@ -455,7 +497,8 @@ Distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
 
 ## Auteur
 
-**marie-Goretti**  
+**marie-Goretti**
+
 [Profil GitHub](https://github.com/marie-Goretti)
 
 ---
@@ -464,4 +507,4 @@ Distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
 
 ---
 
-*Document mis à jour le 28 avril 2026 — Dernière modification : commit `0a901db` (ajout gitignore and gitattributes)*
+*Document mis à jour le 29 avril 2026 — Dernière modification : commit `dde6e01` (ajustement mobile)*
