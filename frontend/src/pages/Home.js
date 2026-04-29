@@ -113,7 +113,6 @@ function Home() {
             <Link to="/shop" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', width: 'max-content' }}>
               Acheter <ArrowRight size={16} />
             </Link>
-            <a href="#instagram" style={styles.ideasLink}>Suivre sur Instagram</a>
           </div>
         </div>
       </div>
