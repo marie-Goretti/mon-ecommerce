@@ -151,6 +151,14 @@ mon-ecommerce/
 
 ---
 
+## Architecture
+
+![Architecture du projet](docs/architecture.png)
+
+**Flux principal :** Développeur → GitHub Actions (CI/CD) → AWS ECR → ECS Fargate (Frontend React + Backend Node.js) → Neon PostgreSQL (cloud)
+
+---
+
 ## Prérequis
 
 - **Node.js** >= 18.x
@@ -160,6 +168,7 @@ mon-ecommerce/
 - **Terraform** >= 1.5 (pour le déploiement AWS)
 - **AWS CLI** configuré (pour Terraform)
 - **Git** >= 2.30
+- **Base de données** : [Neon](https://neon.tech) (PostgreSQL managé, pas besoin d'installer PostgreSQL localement)
 
 ---
 
@@ -250,35 +259,8 @@ docker-compose run frontend npm test
 ---
 
 ## Variables d'environnement
-
-Créez un fichier `.env` à la racine du projet avec les variables suivantes :
-
-```env
-# === Backend ===
-PORT=5000
-DATABASE_URL=postgresql://user:password@localhost:5432/ecommerce_db
-JWT_SECRET=votre_secret_jwt_tres_securise_ici
-JWT_EXPIRE=7d
-NODE_ENV=development
-
-# === Frontend ===
-REACT_APP_API_URL=http://localhost:5000/api
-REACT_APP_STRIPE_PUBLIC_KEY=pk_test_votre_cle
-
-# === Paiement (Stripe ou autre) ===
-STRIPE_SECRET_KEY=sk_test_votre_cle_secrete
-STRIPE_WEBHOOK_SECRET=whsec_votre_secret
-
-# === AWS / Terraform (pour le déploiement) ===
-AWS_REGION=eu-west-3
-AWS_PROFILE=default
-TERRAFORM_STATE_BUCKET=mon-ecommerce-tfstate
-ECR_REPO_URL=123456789.dkr.ecr.eu-west-3.amazonaws.com/mon-ecommerce
-
-# === Monitoring ===
-CLOUDWATCH_LOG_GROUP=/ecs/mon-ecommerce
-PROMETHEUS_ENDPOINT=/metrics
-```
+# Base de données (Neon PostgreSQL — cloud managé)
+DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/ecommerce_db?sslmode=require
 
 > **Important** : Ne commitez jamais le fichier `.env` dans le repository. Il est déjà listé dans `.gitignore`.
 
