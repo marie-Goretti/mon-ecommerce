@@ -168,7 +168,7 @@ mon-ecommerce/
 - **Terraform** >= 1.5 (pour le déploiement AWS)
 - **AWS CLI** configuré (pour Terraform)
 - **Git** >= 2.30
-- **Base de données** : [Neon](https://neon.tech) (PostgreSQL managé, pas besoin d'installer PostgreSQL localement)
+- **Base de données** : [Neon](https://neon.tech) (PostgreSQL managé, pas besoin d'installer  PostgreSQL localement)
 
 ---
 
@@ -282,6 +282,17 @@ cd frontend
 npm test
 npm run test:coverage
 ```
+
+## Tests
+
+| Dossier | Type | Framework |
+|---------|------|-----------|
+| `tests/integration/` | Tests d'intégration API | Jest + Supertest |
+| `tests/unit/` | Tests unitaires logique métier | Jest |
+| `backend/src/` | Tests unitaires backend | Jest |
+| `frontend/src/` | Tests composants | React Testing Library |
+
+
 
 ### Couverture minimale requise
 
