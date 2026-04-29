@@ -64,9 +64,8 @@
 
 - Conteneurisation complète avec Docker et docker-compose
 - Dockerfile multi-stage optimisé pour la production
-- Infrastructure as Code avec Terraform (AWS : VPC, ECS, RDS, ECR, Security Groups)
-- CI/CD automatisé avec GitHub Actions (tests, linting, build, déploiement)
-- Gestion sécurisée des secrets via GitHub Secrets et variables d'environnement
+-Infrastructure as Code avec Terraform (AWS : VPC, EC2 instances, RDS, ECR, Security Groups, ALB)
++ CI/CD automatisé avec GitHub Actions (tests, linting, build, déploiement sur EC2)
 
 ---
 
@@ -121,13 +120,13 @@ mon-ecommerce/
 │   ├── variables.tf         # Variables d'entrée
 │   ├── outputs.tf           # Outputs des ressources
 │   ├── vpc.tf               # VPC, subnets, route tables
-│   ├── ecs.tf               # ECS Cluster, Task Definition, Service
+│   ├── ec2.tf               # EC2 instances, user-data, auto-scaling
 │   ├── rds.tf               # Instance PostgreSQL RDS
 │   ├── ecr.tf               # Registry pour images Docker
 │   ├── alb.tf               # Application Load Balancer
 │   ├── security_groups.tf   # Règles de sécurité
-│   ├── cloudwatch.tf        # Log groups et métriques
-│   └── terraform.tfvars     # Valeurs des variables (à ne pas commiter)
+│   ├── autoscaling.tf       # Auto Scaling Group (optionnel)
+│   └── terraform.tfvars     # Valeurs des variables
 │
 ├── .github/workflows/        # Pipelines CI/CD
 │   ├── ci.yml               # Tests, linting, sécurité, couverture
@@ -412,13 +411,16 @@ terraform apply -var-file=terraform.tfvars
 
 ### Ressources déployées
 
-- VPC avec sous-réseaux publics et privés sur plusieurs zones de disponibilité
-- Security Groups pour ECS, RDS, ALB avec règles restrictives
-- Cluster ECS Fargate pour l'orchestration des conteneurs
-- Task Definition avec health checks et logging CloudWatch
+### Ressources déployées
+
+- VPC avec sous-réseaux publics et privés sur plusieurs AZ
+- Security Groups pour EC2, RDS, ALB avec règles restrictives
+- Instances EC2 (Amazon Linux 2/2023) avec Docker Engine
+- User-data script pour l'installation automatique de Docker et le déploiement
+- Application Load Balancer avec target group pointant vers les instances EC2
+- Auto Scaling Group (optionnel) pour la montée en charge
 - Instance RDS PostgreSQL avec sauvegardes automatiques
 - Registry ECR pour le stockage des images Docker
-- Application Load Balancer avec redirection HTTPS
 - CloudWatch Log Groups pour la centralisation des logs
 
 ### Mise à jour de l'application
@@ -428,7 +430,10 @@ Après un push sur la branche `main`, le pipeline CD :
 1. Build l'image Docker avec le tag du commit
 2. Scan l'image pour vulnérabilités
 3. Push vers ECR
-4. Met à jour le service ECS avec la nouvelle image
+4. Déclenche un déploiement sur les instances EC2 via :
+    - SSH + docker pull/run (simple)
+    - OU AWS CodeDeploy (recommandé pour le blue/green)
+    - OU user-data re-run via SSM
 
 ### Nettoyage (attention : destructif)
 
