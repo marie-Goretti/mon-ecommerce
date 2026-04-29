@@ -2,6 +2,9 @@
 
 > Application e-commerce full-stack moderne avec architecture microservices, conteneurisation Docker et infrastructure as code avec Terraform/AWS.
 
+<img width="1874" height="878" alt="Capture d&#39;écran 2026-04-29 012606" src="https://github.com/user-attachments/assets/3a167ac1-43cc-4655-b11e-ce2c5355cd66" />
+
+
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat&logo=nodedotjs&logoColor=white)
