@@ -17,8 +17,8 @@ const chartData = [
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState({ products: 0, categories: 0, users: 0, orders: 0 });
-  const [latestUsers, setLatestUsers] = useState([]); 
-  const [pendingOrders, setPendingOrders] = useState([]); 
+  const [latestUsers, setLatestUsers] = useState([]);
+  const [pendingOrders, setPendingOrders] = useState([]);
 
 
   useEffect(() => {
@@ -30,18 +30,18 @@ const AdminDashboard = () => {
           getUsers(),
           getAllOrders()
         ]);
-        
+
         const deliveredOrders = orderRes.data.filter(o => o.status === 'Livrée');
         const pending = orderRes.data.filter(o => o.status === 'En attente');
-        
+
         setStats({
           products: prodRes.data.length,
           categories: catRes.data.length,
           users: userRes.data.length,
           orders: deliveredOrders.length
         });
-        setLatestUsers(userRes.data.slice(0, 5)); 
-        setPendingOrders(pending); 
+        setLatestUsers(userRes.data.slice(0, 5));
+        setPendingOrders(pending);
       } catch (error) {
         console.error("Erreur lors du chargement des statistiques", error);
       }
@@ -160,13 +160,12 @@ const AdminDashboard = () => {
         <div className="team-section">
           <div className="section-header">
             <h3>Derniers Utilisateurs</h3>
-            <button className="btn-add-member">+ Ajouter Membre</button>
           </div>
           <div className="team-list">
             {latestUsers.map((u, index) => (
               <div className="team-member" key={u.id}>
-                <div 
-                  className="member-avatar" 
+                <div
+                  className="member-avatar"
                   style={{ background: index % 2 === 0 ? '#163a4a' : '#f09653' }}
                 >
                   {u.name?.charAt(0).toUpperCase()}

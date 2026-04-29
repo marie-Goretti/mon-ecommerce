@@ -27,8 +27,8 @@ const AdminSidebar = () => {
             const Icon = link.icon;
             return (
               <li key={link.path}>
-                <Link 
-                  to={link.path} 
+                <Link
+                  to={link.path}
                   className={location.pathname === link.path ? 'active' : ''}
                 >
                   <Icon size={18} className="sidebar-icon" />
@@ -64,12 +64,6 @@ const AdminSidebar = () => {
         </ul>
       </div>
 
-      <div className="admin-sidebar-card">
-        <div className="admin-card-icon">A</div>
-        <h4>Retourner au site</h4>
-        <p>Visitez la boutique publique.</p>
-        <Link to="/" className="admin-card-btn">Boutique</Link>
-      </div>
     </div>
   );
 };
