@@ -145,7 +145,7 @@ mon-ecommerce/
 
 <img width="1149" height="852" alt="architeccture" src="https://github.com/user-attachments/assets/fe7dcddc-9d94-4eb8-9079-0a60fcb29335" /> <hr><hr>
 
-**Flux principal :** Développeur → GitHub Actions (CI/CD) → AWS ECR → ECS Fargate (Frontend React + Backend Node.js) → Neon PostgreSQL (cloud)
+**Flux principal :** Développeur → GitHub Actions (CI/CD) → AWS ECR → AWS EC2 → Neon PostgreSQL (cloud)
 
 ---
 
